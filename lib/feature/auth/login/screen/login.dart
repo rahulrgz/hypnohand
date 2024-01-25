@@ -65,7 +65,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       Text("Continue with Google",
                           style: TextStyle(
                               fontWeight: FontWeight.w500,
-                              fontSize: h * 0.02,
+                              fontSize: h * 0.015,
                               color: Palette.blackColor)),
                     ],
                   ),
@@ -93,7 +93,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     Text("Continue with Apple",
                         style: TextStyle(
                             fontWeight: FontWeight.w500,
-                            fontSize: h * 0.02,
+                            fontSize: h * 0.015,
                             color: Palette.blackColor)),
                   ],
                 ),
