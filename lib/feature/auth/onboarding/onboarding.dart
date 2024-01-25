@@ -1,11 +1,11 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
 import '../../../core/constands/image_constants.dart';
 import '../../../core/global_variables/global_variables.dart';
 import '../../../core/theme/pallete.dart';
-import '../login/login.dart';
+import '../login/screen/login.dart';
 
 class OnboardingScreen extends StatefulWidget {
   const OnboardingScreen({super.key});
@@ -42,6 +42,8 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
 
   @override
   Widget build(BuildContext context) {
+    h = MediaQuery.of(context).size.height;
+    w = MediaQuery.of(context).size.width;
     return Scaffold(
       backgroundColor: Palette.bgColor,
       body: SafeArea(
@@ -65,7 +67,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                     width: w,
                     child: Column(
                       children: [
-                        Image.asset(
+                        SvgPicture.asset(
                           Constants.onboard1,
                           height: h * 0.4,
                         ),
@@ -100,15 +102,15 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                     width: w,
                     child: Column(
                       children: [
-                        Image.asset(
+                        SvgPicture.asset(
                           Constants.onboard2,
-                          height: h * 0.4,
+                          height: h * 0.43,
                         ),
-                        SizedBox(
-                          height: h * 0.03,
-                        ),
+                        // SizedBox(
+                        //   height: h * 0.01,
+                        // ),
                         Text(
-                          'Monitored by certified\n Teachers.',
+                          'Monitored by skilled\n Tutors.',
                           textAlign: TextAlign.center,
                           style: TextStyle(
                             fontSize: h * 0.03,
@@ -135,12 +137,12 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                     width: w,
                     child: Column(
                       children: [
-                        Image.asset(
+                        SvgPicture.asset(
                           Constants.onboard3,
-                          height: h * 0.41,
+                          height: h * 0.36,
                         ),
                         SizedBox(
-                          height: h * 0.02,
+                          height: h * 0.06,
                         ),
                         Text(
                           "Let's enroll your favorite \ncourse right now!",
@@ -185,7 +187,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                     onTap: () {
                       Navigator.push(
                         context,
-                        CupertinoPageRoute(
+                        MaterialPageRoute(
                           builder: (context) => const LoginScreen(),
                         ),
                       );
@@ -194,7 +196,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                       width: w * 0.8,
                       height: h * 0.05,
                       decoration: BoxDecoration(
-                        color: Palette.mainButton,
+                        color: Palette.secondaryColor,
                         borderRadius: BorderRadius.circular(h * 0.06),
                       ),
                       child: Center(
@@ -219,7 +221,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                       width: w * 0.8,
                       height: h * 0.05,
                       decoration: BoxDecoration(
-                        color: Palette.mainButton,
+                        color: Palette.secondaryColor,
                         borderRadius: BorderRadius.circular(h * 0.06),
                       ),
                       child: Center(
