@@ -87,9 +87,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       height: h * 0.027,
                       color: Colors.black,
                     ),
-                    SizedBox(
-                      width: w * 0.03,
-                    ),
+                    SizedBox(width: w * 0.03),
                     Text("Continue with Apple",
                         style: TextStyle(
                             fontWeight: FontWeight.w500,
