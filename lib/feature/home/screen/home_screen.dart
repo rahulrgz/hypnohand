@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:hypnohand/feature/single_course/screen/single_course.dart';
+import 'package:hypnohand/model/usermodel.dart';
 import 'package:scroll_page_view/pager/page_controller.dart';
 import 'package:scroll_page_view/pager/scroll_page_view.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -64,7 +65,7 @@ class _HomeScreenState extends State<HomeScreen> {
                               fontWeight: FontWeight.w300),
                           children: <TextSpan>[
                             TextSpan(
-                              text: 'RAHUL ,',
+                              text: userModel?.name??'user',
                               style: TextStyle(
                                   fontSize: h * 0.022,
                                   color: Palette.primaryColor,

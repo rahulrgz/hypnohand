@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:hypnohand/feature/auth/login/controller/auth_controller.dart';
 import 'package:lottie/lottie.dart';
 
 import '../../../../core/constands/image_constants.dart';
@@ -8,14 +10,14 @@ import '../../../../core/global_variables/global_variables.dart';
 import '../../../../core/theme/pallete.dart';
 import '../../../home/screen/bottom_nav.dart';
 
-class LoginScreen extends StatefulWidget {
+class LoginScreen extends ConsumerStatefulWidget {
   const LoginScreen({super.key});
 
   @override
-  State<LoginScreen> createState() => _LoginScreenState();
+  ConsumerState<LoginScreen> createState() => _LoginScreenState();
 }
 
-class _LoginScreenState extends State<LoginScreen> {
+class _LoginScreenState extends ConsumerState<LoginScreen> {
   @override
   Widget build(BuildContext context) {
     h = MediaQuery.of(context).size.height;
@@ -38,12 +40,13 @@ class _LoginScreenState extends State<LoginScreen> {
               SizedBox(height: h * 0.04),
               GestureDetector(
                 onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => const BottomNav(),
-                    ),
-                  );
+                  // Navigator.push(
+                  //   context,
+                  //   MaterialPageRoute(
+                  //     builder: (context) => const BottomNav(),
+                  //   ),
+                  // );
+                  ref.read(authControllerProvider.notifier).signInWithGoogle(ref: ref, context: context);
                 },
                 child: Container(
                   height: h * 0.065,

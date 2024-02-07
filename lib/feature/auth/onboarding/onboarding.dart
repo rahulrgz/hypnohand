@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:hypnohand/feature/auth/splash/splash.dart';
+import 'package:hypnohand/main.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
 import '../../../core/constands/image_constants.dart';
@@ -7,14 +10,14 @@ import '../../../core/global_variables/global_variables.dart';
 import '../../../core/theme/pallete.dart';
 import '../login/screen/login.dart';
 
-class OnboardingScreen extends StatefulWidget {
+class OnboardingScreen extends ConsumerStatefulWidget {
   const OnboardingScreen({super.key});
 
   @override
-  State<OnboardingScreen> createState() => _OnboardingScreenState();
+  ConsumerState<OnboardingScreen> createState() => _OnboardingScreenState();
 }
 
-class _OnboardingScreenState extends State<OnboardingScreen> {
+class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
   final controller = PageController();
   bool isLastPage = false;
   int pageIndex = 0;
@@ -191,6 +194,8 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                           builder: (context) => const LoginScreen(),
                         ),
                       );
+                      // ref.read(onBoardingProvider.notifier).update((state) => true);
+                      prefs!.setBool('onBoarding', true);
                     },
                     child: Container(
                       width: w * 0.8,

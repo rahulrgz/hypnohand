@@ -1,16 +1,20 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hypnohand/core/theme/pallete.dart';
+import 'package:hypnohand/feature/auth/login/controller/auth_controller.dart';
+import 'package:hypnohand/feature/auth/login/repository/auth_repository.dart';
+import 'package:hypnohand/model/usermodel.dart';
 
 import '../../../core/global_variables/global_variables.dart';
 
-class ProfileScreen extends StatefulWidget {
+class ProfileScreen extends ConsumerStatefulWidget {
   const ProfileScreen({super.key});
 
   @override
-  State<ProfileScreen> createState() => _ProfileScreenState();
+  ConsumerState<ProfileScreen> createState() => _ProfileScreenState();
 }
 
-class _ProfileScreenState extends State<ProfileScreen> {
+class _ProfileScreenState extends ConsumerState<ProfileScreen> {
   @override
   Widget build(BuildContext context) {
     h = MediaQuery.of(context).size.height;
@@ -38,7 +42,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       ),
                       SizedBox(height: h * 0.01),
                       Text(
-                        "Rahul Ramesh",
+                        userModel?.name??'name',
                         textAlign: TextAlign.center,
                         style: TextStyle(
                             color: Palette.blackColor,
@@ -46,7 +50,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             fontWeight: FontWeight.w600),
                       ),
                       Text(
-                        "rahulrpm0@gmail.com",
+                        userModel?.phoneNumber??'',
                         textAlign: TextAlign.center,
                         style: TextStyle(
                             color: Palette.primaryColor,
@@ -214,13 +218,18 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 ),
                 SizedBox(height: h * 0.01),
                 Center(
-                  child: Text(
-                    "Logout",
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                        color: Colors.black54,
-                        fontSize: h * 0.018,
-                        fontWeight: FontWeight.w500),
+                  child: GestureDetector(
+                    onTap: () {
+                      ref.read(authControllerProvider.notifier).logOut(context: context);
+                    },
+                    child: Text(
+                      "Logout",
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                          color: Colors.black54,
+                          fontSize: h * 0.018,
+                          fontWeight: FontWeight.w500),
+                    ),
                   ),
                 ),
               ],
