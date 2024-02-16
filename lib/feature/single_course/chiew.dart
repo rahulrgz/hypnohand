@@ -39,9 +39,9 @@ class _ChewieDemoState extends State<ChewieDemo> {
     _chewieController?.dispose();
     super.dispose();
   }
-
+  //     "https://assets.mixkit.co/videos/preview/mixkit-spinning-around-the-earth-29351-large.mp4",
   List<String> srcs = [
-    "https://assets.mixkit.co/videos/preview/mixkit-spinning-around-the-earth-29351-large.mp4",
+    "https://youtu.be/K1KdMictk3s?si=RnOHoGndjDSXnVkn",
     "https://assets.mixkit.co/videos/preview/mixkit-daytime-city-traffic-aerial-view-56-large.mp4",
     "https://assets.mixkit.co/videos/preview/mixkit-a-girl-blowing-a-bubble-gum-at-an-amusement-park-1226-large.mp4"
   ];

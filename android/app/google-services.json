@@ -58,6 +58,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "650766422172-9uudbap4r7d80234933v484c4bgf7bto.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.hypnohand_app",
+            "certificate_hash": "7ed82c1efdf1c9669c02618eddb46f1e261ee932"
+          }
+        },
+        {
           "client_id": "650766422172-3c79nirfsd92kfor5uodsb7skl8hk3u2.apps.googleusercontent.com",
           "client_type": 3
         }
