@@ -1,19 +1,23 @@
 import 'dart:convert';
 import 'dart:math';
-
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:razorpay_flutter/razorpay_flutter.dart';
 import 'razor_credentials.dart' as razorCredentials;
 
-class PaymentScreen extends StatefulWidget {
+
+
+class PaymentScreen extends ConsumerStatefulWidget {
   PaymentScreen({super.key});
 
   @override
-  State<PaymentScreen> createState() => _PaymentScreenState();
+  ConsumerState<PaymentScreen> createState() => _PaymentScreenState();
 }
 
-class _PaymentScreenState extends State<PaymentScreen> {
+class _PaymentScreenState extends ConsumerState<PaymentScreen> {
+  final paymentStatusProvider=StateProvider((ref) => 'Not Initiated');
+
   late Razorpay _razorpay;
   TextEditingController amtController = TextEditingController();
 
@@ -41,6 +45,8 @@ class _PaymentScreenState extends State<PaymentScreen> {
   }
 
   void handlePaymentSucces(PaymentSuccessResponse response) {
+      ref.read(paymentStatusProvider.notifier).update((state) => 'Payment Successfull');
+
     ///course purchased...
     Fluttertoast.showToast(
         msg: "payment Successfull " + response.paymentId!,
@@ -48,6 +54,8 @@ class _PaymentScreenState extends State<PaymentScreen> {
   }
 
   void handlePaymentError(PaymentFailureResponse response) {
+        ref.read(paymentStatusProvider.notifier).update((state) => 'Payment Failed');
+
     Fluttertoast.showToast(
         msg: "Payment Failed " + response.message!,
         toastLength: Toast.LENGTH_SHORT);
@@ -80,52 +88,46 @@ class _PaymentScreenState extends State<PaymentScreen> {
     return Scaffold(
       backgroundColor: Colors.grey[800],
       body: SingleChildScrollView(
-        child: Column(
-          children: [
-            SizedBox(
-              height: 100,
-            ),
+        child: Center(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              SizedBox(
+                height: 100,
+              ),
+              SizedBox(
+                height: 10,
+              ),
+              Text(
+                'Purchase this course for 1,299',
+                style: TextStyle(
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 18,
+                ),
+                textAlign: TextAlign.center,
+              ),
+              SizedBox(
+                height: 30,
+              ),
 
-            SizedBox(
-              height: 10,
-            ),
-            Text(
-              'Purchase this course for 1299',
-              style: TextStyle(
+              SizedBox(height: 30,),
+              ElevatedButton(onPressed: () {
+              openCheckout(1299);
+                },
+               child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Text('Make Payement'),
+              )),
+              Consumer(builder: (context, ref, child) {
+                return Text("Payment Status: ${ref.watch(paymentStatusProvider)},",style: TextStyle(
                   color: Colors.white,
                   fontWeight: FontWeight.bold,
-                  fontSize: 18),
-              textAlign: TextAlign.center,
-            ),
-            SizedBox(
-              height: 30,
-            ),
-            // Padding(
-            //   padding: EdgeInsets.all(8.0),
-            //   child: TextFormField(
-            //     cursorColor: Colors.white,
-            //     autofocus: false,
-            //     style: TextStyle(color: Colors.white),
-            //     decoration: InputDecoration(
-            //         labelText: 'enter amount to be paid',
-            //         labelStyle: TextStyle(fontSize: 15.0, color: Colors.white)),
-            //     controller: amtController,
-            //     validator: (value) {
-            //       if (value == null || value.isEmpty) {
-            //         return 'please enter Amount to be paid';
-            //       }
-            //     },
-            //   ),
-            // ),
-            SizedBox(height: 30,),
-            ElevatedButton(onPressed: () {
-    openCheckout(1299);
-              },
-             child: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Text('Make Payement'),
-            ))
-          ],
+                  fontSize: 18,
+                ),);
+              },  )
+            ],
+          ),
         ),
       ),
     );
