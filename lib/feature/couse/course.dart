@@ -19,6 +19,7 @@ class _AllCourseState extends State<AllCourse> {
     h = MediaQuery.of(context).size.height;
     w = MediaQuery.of(context).size.width;
     return Scaffold(
+
       backgroundColor: Color(0xFFF8F6F4),
       body: Column(
         children: [
@@ -212,6 +213,7 @@ class _AllCourseState extends State<AllCourse> {
           ),
         ],
       ),
+
     );
   }
 }

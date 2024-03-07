@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:hypnohand/core/theme/pallete.dart';
+import 'package:hypnohand/feature/single_course/screen/payMent.dart';
 import '../../../../core/global_variables/global_variables.dart';
 import '../chiew.dart';
 
@@ -18,7 +19,15 @@ class _CourseSingleViewState extends State<CourseSingleView> {
     h = MediaQuery.of(context).size.height;
     w = MediaQuery.of(context).size.width;
     return SafeArea(
-      child: Scaffold(
+      child: Scaffold(  floatingActionButton: FloatingActionButton.extended(onPressed: () {
+Navigator.of(context).push(MaterialPageRoute(builder: (context) {
+  return PaymentScreen();
+},));
+      },
+
+        label: Text('Buy Now'),
+      ),
+
         backgroundColor: Color(0xFFF8F6F4),
         body: Padding(
           padding: EdgeInsets.fromLTRB(w * 0.05, 0, w * 0.05, 0),

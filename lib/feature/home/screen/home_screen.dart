@@ -1,11 +1,13 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hypnohand/feature/home/controller/homecontroller.dart';
 import 'package:hypnohand/feature/single_course/screen/single_course.dart';
 import 'package:hypnohand/model/usermodel.dart';
+import 'package:mobile_device_identifier/mobile_device_identifier.dart';
 import 'package:scroll_page_view/pager/page_controller.dart';
 import 'package:scroll_page_view/pager/scroll_page_view.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -15,14 +17,20 @@ import '../../../core/common/loader.dart';
 import '../../../core/global_variables/global_variables.dart';
 import '../../../core/theme/pallete.dart';
 
-class HomeScreen extends StatefulWidget {
+
+
+class HomeScreen extends ConsumerStatefulWidget {
   const HomeScreen({super.key});
 
   @override
-  State<HomeScreen> createState() => _HomeScreenState();
+  ConsumerState<HomeScreen> createState() => _HomeScreenState();
 }
 
-class _HomeScreenState extends State<HomeScreen> {
+class _HomeScreenState extends ConsumerState<HomeScreen> {
+
+
+
+  
   static const _images = [
     'assets/Banner1.jpg',
     'assets/Banner1.jpg',
@@ -44,6 +52,7 @@ class _HomeScreenState extends State<HomeScreen> {
       print('Could not launch $url');
     }
   }
+
 
 
   @override

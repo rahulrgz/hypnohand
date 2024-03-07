@@ -4,7 +4,6 @@ import 'package:hypnohand/core/theme/pallete.dart';
 import 'package:hypnohand/feature/auth/login/controller/auth_controller.dart';
 import 'package:hypnohand/feature/auth/login/repository/auth_repository.dart';
 import 'package:hypnohand/model/usermodel.dart';
-
 import '../../../core/global_variables/global_variables.dart';
 
 class ProfileScreen extends ConsumerStatefulWidget {
