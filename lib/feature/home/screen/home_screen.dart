@@ -1,9 +1,12 @@
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:hypnohand/core/model/courseModel.dart';
+import 'package:hypnohand/core/utils.dart';
 import 'package:hypnohand/feature/home/controller/homecontroller.dart';
 import 'package:hypnohand/feature/single_course/screen/single_course.dart';
 import 'package:hypnohand/model/usermodel.dart';
@@ -203,7 +206,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
 
                 return CarouselSlider(
                   options: CarouselOptions(
-                    height: h * 0.34,
+                    height: h * 0.28,
                     aspectRatio: 16 / 9,
                     viewportFraction: 1,
                     initialPage: 0,
@@ -316,6 +319,9 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                           child: GestureDetector(
                             onTap: () {
                               launchYouTubeVideo(s);
+                              // FirebaseFirestore.instance.collection("courses").doc("001").update({
+                              //   "search":setSearchParam("Mentalism Malayalam")
+                              // });
                             },
                             child: Container(
                               width: w * 0.5,
@@ -380,90 +386,97 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                 ],
               ),
             ),
-            Padding(
-              padding: EdgeInsets.only(left: w * 0.02),
-              child: SizedBox(
-                height: h * 0.255,
-                child: ListView.builder(
-                  shrinkWrap: true,
-                  physics: BouncingScrollPhysics(),
-                  scrollDirection: Axis.horizontal,
-                  itemCount: 4,
-                  itemBuilder: (context, index) {
-                    return Padding(
-                      padding: EdgeInsets.fromLTRB(
-                          w * 0.02, w * 0.02, w * 0.03, w * 0.02),
-                      child: GestureDetector(
-                        onTap: () {
-                          Navigator.push(
-                            context,
-                            CupertinoPageRoute(
-                              builder: (context) => CourseSingleView(),
-                            ),
-                          );
-                        },
-                        child: SizedBox(
-                          width: w * 0.5,
-                          child: Column(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              ClipRRect(
-                                borderRadius: BorderRadius.circular(w * 0.04),
-                                child: Image.asset(
-                                  "assets/Banner1.jpg",
-                                  width: w * 0.5,
-                                  height: h * 0.15,
-                                  fit: BoxFit.cover,
+            Consumer(builder: (context, ref, child) {
+              return ref.watch(getCourseList).when(data: (data) {
+                return data.isEmpty?Text("No courses"):Padding(
+                  padding: EdgeInsets.only(left: w * 0.02),
+                  child: SizedBox(
+                    height: h * 0.255,
+                    child: ListView.builder(
+                      shrinkWrap: true,
+                      physics: BouncingScrollPhysics(),
+                      scrollDirection: Axis.horizontal,
+                      itemCount: data.length,
+                      itemBuilder: (context, index) {
+                        coursemodell=data[index];
+
+                        return Padding(
+                          padding: EdgeInsets.fromLTRB(
+                              w * 0.02, w * 0.02, w * 0.03, w * 0.02),
+                          child: GestureDetector(
+                            onTap: () {
+
+                              Navigator.push(
+                                context,
+                                CupertinoPageRoute(
+                                  builder: (context) => CourseSingleView(
+                                    courseModel: data[index],
+                                  ),
                                 ),
-                              ),
-                              Padding(
-                                padding: EdgeInsets.fromLTRB(
-                                    w * 0.01, h * 0.003, w * 0.01, 0),
-                                child: Text(
-                                  "Performance by first Student in kerala",
-                                  maxLines: 2,
-                                  overflow: TextOverflow.ellipsis,
-                                  style: TextStyle(
-                                      color: Palette.blackColor,
-                                      fontSize: h * 0.018,
-                                      fontWeight: FontWeight.w500),
-                                ),
-                              ),
-                              Padding(
-                                padding: EdgeInsets.fromLTRB(
-                                    w * 0.01, 0, w * 0.02, 0),
-                                child: Row(
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  mainAxisAlignment: MainAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      "16 Students",
+                              );
+                            },
+                            child: SizedBox(
+                              width: w * 0.5,
+                              child: Column(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  ClipRRect(
+                                    borderRadius: BorderRadius.circular(w * 0.04),
+                                    child: Image.network("${data[index].thumbnailImage.toString()}",
+                                      width: w * 0.5,
+                                      height: h * 0.15,
+                                      fit: BoxFit.cover,)
+                                  ),
+                                  Padding(
+                                    padding: EdgeInsets.fromLTRB(
+                                        w * 0.01, h * 0.003, w * 0.01, 0),
+                                    child: Text(data[index].coursename.toString(),
+                                      maxLines: 2,
+                                      overflow: TextOverflow.ellipsis,
                                       style: TextStyle(
                                           color: Palette.blackColor,
-                                          fontSize: w * 0.029,
-                                          fontWeight: FontWeight.w400),
-                                    ),
-                                    Spacer(),
-                                    Icon(CupertinoIcons.star, size: w * 0.03),
-                                    Text(
-                                      " 4.5",
-                                      style: TextStyle(
-                                          color: Palette.blackColor,
-                                          fontSize: w * 0.032,
+                                          fontSize: h * 0.018,
                                           fontWeight: FontWeight.w500),
                                     ),
-                                  ],
-                                ),
+                                  ),
+                                  Padding(
+                                    padding: EdgeInsets.fromLTRB(
+                                        w * 0.01, 0, w * 0.02, 0),
+                                    child: Row(
+                                      crossAxisAlignment: CrossAxisAlignment.center,
+                                      mainAxisAlignment: MainAxisAlignment.start,
+                                      children: [
+                                        // Text(
+                                        //   "16 Students",
+                                        //   style: TextStyle(
+                                        //       color: Palette.blackColor,
+                                        //       fontSize: w * 0.029,
+                                        //       fontWeight: FontWeight.w400),
+                                        // ),
+                                        Spacer(),
+                                        Icon(CupertinoIcons.star, size: w * 0.03),
+                                        Text(
+                                          " 4.5",
+                                          style: TextStyle(
+                                              color: Palette.blackColor,
+                                              fontSize: w * 0.032,
+                                              fontWeight: FontWeight.w500),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ],
                               ),
-                            ],
+                            ),
                           ),
-                        ),
-                      ),
-                    );
-                  },
-                ),
-              ),
-            ),
+                        );
+                      },
+                    ),
+                  ),
+                );
+              }, error: (error, stackTrace) =>
+                  ErrorText(error: error.toString()), loading: () => Loader(),);
+            },),
             SizedBox(height: h * 0.01),
             Padding(
               padding: EdgeInsets.fromLTRB(w * 0.04, 0, w * 0.04, h * 0.01),
