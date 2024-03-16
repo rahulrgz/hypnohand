@@ -1,5 +1,4 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:device_info/device_info.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -14,7 +13,6 @@ import 'package:hypnohand/core/type_def.dart';
 import 'package:hypnohand/core/utils.dart';
 import 'package:hypnohand/feature/auth/login/screen/login.dart';
 import 'package:hypnohand/feature/home/screen/bottom_nav.dart';
-import 'package:hypnohand/feature/home/screen/home_screen.dart';
 import 'package:hypnohand/main.dart';
 import 'package:hypnohand/model/sessionsModel.dart';
 import 'package:hypnohand/model/usermodel.dart';
@@ -221,7 +219,7 @@ class AuthRepository {
     }
   }
 
-  FutureEither<UserModel?> signInWithEmailAndPassword({
+  signInWithEmailAndPassword({
     required String password,
     required String email,
     required BuildContext context,
@@ -230,46 +228,54 @@ class AuthRepository {
     try {
       String deviceId = ref.read(devideIdProvider) ?? 'Devide Id';
 
-      final credential = await FirebaseAuth.instance
+      FirebaseAuth.instance
           .signInWithEmailAndPassword(email: email, password: password)
           .then((value) async {
         final user = await _firestore
             .collection(FirebaseConstants.usersCollection)
             .where('email', isEqualTo: email)
             .get();
+
         userModel = UserModel.fromJson(user.docs.first.data());
+        print(userModel?.email ?? 'email');
+        print('email=================');
 
         var sessionsDoc = await _sessions.doc(userModel!.id).get();
 
         if (sessionsDoc.exists) {
           print(sessionsDoc.reference);
           print('reference');
+          print('sessionDocExists--------------');
 
           sessionsModel = SessionsModel.fromJson(
               sessionsDoc.data() as Map<String, dynamic>);
 
           if (sessionsModel!.deviceId == deviceId) {
-            print("heloooooooooooooooooooooooooooooooooooooooooooooooooo");
-            // Navigator.push(
-            //   context,
-            //   CupertinoPageRoute(
-            //     builder: (context) => const BottomNav(),
-            //   ),
-            // );
-            // prefs!.setBool('logged', true);
-            return right(userModel);
+            print("device id same----------------");
+            Navigator.push(
+              context,
+              CupertinoPageRoute(
+                builder: (context) => const BottomNav(),
+              ),
+            );
+            prefs!.setBool('logged', true);
+            // return right(userModel);
           } else {
-            return left(
-                Failure('this account is already logged in on another device'));
+            print('device id not same----------');
+            showSnackbar(
+                context, 'this account is already logged in on another device');
+            // return left(
+            //     Failure('this account is already logged in on another device'));
           }
         } else {
-          SessionsModel data = SessionsModel(
-            deviceId: deviceId,
-            lastLoggin: DateTime.now(),
-          );
+          // print('session Doc does not exist');
+          // SessionsModel data = SessionsModel(
+          //   deviceId: deviceId,
+          //   lastLoggin: DateTime.now(),
+          // );
 
-          _sessions.doc(userModel!.id).set(data.toJson());
-          return right(userModel);
+          // _sessions.doc(userModel!.id).set(data.toJson());
+          // return right(userModel);
         }
       });
 
