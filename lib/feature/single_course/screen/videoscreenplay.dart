@@ -128,7 +128,9 @@ class _VideoScreenPlayState extends State<VideoScreenPlay> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(),
+      appBar: AppBar()
+
+      ,
 
 
 
