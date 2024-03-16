@@ -129,6 +129,9 @@ class _VideoScreenPlayState extends State<VideoScreenPlay> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(),
+
+
+
       body: Container(
         color: Colors.black,
         child:  AspectRatio(aspectRatio: 16/9,
