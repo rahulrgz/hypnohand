@@ -81,11 +81,11 @@ class _PaymentScreenState extends ConsumerState<PaymentScreen> {
 
   void handlePaymentSucces(PaymentSuccessResponse response) {
       ref.read(paymentStatusProvider.notifier).update((state) => 'Payment Successfull');
-      onPaymentSuccess(price: 1299, discount: 0, courseName: 'course 1', subName: 'course 1', response: response.data??{});
+      onPaymentSuccess(price: 1299, discount: 0, courseName: 'course 1', subName: 'course 1', response: {});
       print(response.signature);
       print(response.paymentId);
       print(response.orderId);
-      print(response.data);
+      // print(response.data);
       
       print("success response-------------");
       ///on success we will verify signature to check authenticity
@@ -106,7 +106,7 @@ class _PaymentScreenState extends ConsumerState<PaymentScreen> {
         ref.read(paymentStatusProvider.notifier).update((state) => 'Payment Failed');
         print( response);
         print(response.message);
-        print(response.error);
+        // print(response.error);
         print(response.code);
 
         print('failure response----------------------');

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hypnohand/core/theme/pallete.dart';
+import 'package:hypnohand/core/utils.dart';
 import 'package:hypnohand/feature/auth/login/controller/auth_controller.dart';
 import 'package:hypnohand/feature/auth/login/repository/auth_repository.dart';
 import 'package:hypnohand/model/usermodel.dart';
@@ -34,14 +35,14 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                     crossAxisAlignment: CrossAxisAlignment.center,
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      CircleAvatar(
-                        radius: h * 0.07,
-                        backgroundImage: NetworkImage(
-                            "https://lh3.googleusercontent.com/a/ACg8ocImL96IeWUFYcO6A0ZFubKe-GLT4qNh8X69LYJjvhdQId1H=s331-c-no"),
-                      ),
+                      // CircleAvatar(
+                      //   radius: h * 0.07,
+                      //   backgroundImage: NetworkImage(
+                      //       "https://lh3.googleusercontent.com/a/ACg8ocImL96IeWUFYcO6A0ZFubKe-GLT4qNh8X69LYJjvhdQId1H=s331-c-no"),
+                      // ),
                       SizedBox(height: h * 0.01),
                       Text(
-                        userModel?.name??'name',
+                        userModel?.name ?? 'name',
                         textAlign: TextAlign.center,
                         style: TextStyle(
                             color: Palette.blackColor,
@@ -49,7 +50,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                             fontWeight: FontWeight.w600),
                       ),
                       Text(
-                        userModel?.phoneNumber??'',
+                        userModel?.phoneNumber ?? '',
                         textAlign: TextAlign.center,
                         style: TextStyle(
                             color: Palette.primaryColor,
@@ -219,7 +220,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                 Center(
                   child: GestureDetector(
                     onTap: () {
-                      ref.read(authControllerProvider.notifier).logOut(context: context);
+                      showAlertDialog(context, ref);
                     },
                     child: Text(
                       "Logout",

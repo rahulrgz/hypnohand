@@ -218,39 +218,108 @@ class AuthRepository {
       return left(Failure(e.toString()));
     }
   }
+// //
+//    FutureEither<UserModel?> signInWithEmailAndPassword({
+//     required String password,
+//     required String email,
+//     required BuildContext context,
+//     required WidgetRef ref,
+//   }) async {
+//     try {
+//       print('signin with email and password');
+//       String deviceId = ref.read(devideIdProvider) ?? 'Devide Id';
 
-  signInWithEmailAndPassword({
-    required String password,
-    required String email,
-    required BuildContext context,
-    required WidgetRef ref,
-  }) async {
+//     var user=await  FirebaseAuth.instance
+//           .signInWithEmailAndPassword(email: email, password: password)
+//           .then((value) async {
+//         final user = await _firestore
+//             .collection(FirebaseConstants.usersCollection)
+//             .where('email', isEqualTo: email)
+//             .get();
+
+//         userModel = UserModel.fromJson(user.docs.first.data());
+//         print(userModel?.email ?? 'email');
+//         print('email=================');
+
+//         var sessionsDoc = await _sessions.doc(userModel!.id).get();
+
+//         if (sessionsDoc.exists) {
+//           print(sessionsDoc.reference);
+//           print('reference');
+//           print('sessionDocExists--------------');
+
+//           sessionsModel = SessionsModel.fromJson(
+//               sessionsDoc.data() as Map<String, dynamic>);
+
+//           if (sessionsModel!.deviceId == deviceId) {
+//             print("device id same----------------");
+//             Navigator.push(
+//               context,
+//               CupertinoPageRoute(
+//                 builder: (context) => const BottomNav(),
+//               ),
+//             );
+//             prefs!.setBool('logged', true);
+//             // return right(userModel);
+//           } else {
+//             print('device id not same----------');
+//             showSnackbar(
+//                 context, 'this account is already logged in on another device');
+//             // return left(
+//             //     Failure('this account is already logged in on another device'));
+//           }
+//         } else {
+//           print('session Doc does not exist');
+//           final user = await _firestore
+//               .collection(FirebaseConstants.usersCollection)
+//               .where('email', isEqualTo: email)
+//               .get();
+
+//           userModel = UserModel.fromJson(user.docs.first.data());
+//           print(userModel!.name);
+//           SessionsModel data = SessionsModel(
+//             deviceId: deviceId,
+//             lastLoggin: DateTime.now(),
+//           );
+
+//           _sessions.doc(userModel!.id).set(data.toJson());
+//           return right(userModel);
+//         }
+//       });
+
+//       return right(userModel);
+//     } catch (e) {
+//       return left(Failure(e.toString()));
+//     }
+//   }
+
+  signInWithEmailAndPassword(
+      {required String password,
+      required String email,
+      required BuildContext context,
+      required WidgetRef ref}) async {
     try {
       String deviceId = ref.read(devideIdProvider) ?? 'Devide Id';
-
-      FirebaseAuth.instance
+      final credential = await FirebaseAuth.instance
           .signInWithEmailAndPassword(email: email, password: password)
           .then((value) async {
         final user = await _firestore
             .collection(FirebaseConstants.usersCollection)
             .where('email', isEqualTo: email)
             .get();
-
         userModel = UserModel.fromJson(user.docs.first.data());
-        print(userModel?.email ?? 'email');
-        print('email=================');
+        print("email and pass correct");
 
         var sessionsDoc = await _sessions.doc(userModel!.id).get();
 
+        ///check if a session exists for this user..
         if (sessionsDoc.exists) {
-          print(sessionsDoc.reference);
-          print('reference');
-          print('sessionDocExists--------------');
-
+          print("session already exists");
           sessionsModel = SessionsModel.fromJson(
               sessionsDoc.data() as Map<String, dynamic>);
 
-          if (sessionsModel!.deviceId == deviceId) {
+              ///check if current session's device id is equal to current device id...
+               if (sessionsModel!.deviceId == deviceId) {
             print("device id same----------------");
             Navigator.push(
               context,
@@ -259,29 +328,33 @@ class AuthRepository {
               ),
             );
             prefs!.setBool('logged', true);
-            // return right(userModel);
           } else {
             print('device id not same----------');
             showSnackbar(
                 context, 'this account is already logged in on another device');
-            // return left(
-            //     Failure('this account is already logged in on another device'));
           }
-        } else {
-          // print('session Doc does not exist');
-          // SessionsModel data = SessionsModel(
-          //   deviceId: deviceId,
-          //   lastLoggin: DateTime.now(),
-          // );
+        }else{
 
-          // _sessions.doc(userModel!.id).set(data.toJson());
-          // return right(userModel);
+          SessionsModel data = SessionsModel(
+            deviceId: deviceId,
+            lastLoggin: DateTime.now(),
+          );
+
+          _sessions.doc(userModel!.id).set(data.toJson());
+
+           Navigator.push(
+          context,
+          CupertinoPageRoute(
+            builder: (context) => const BottomNav(),
+          ),
+        );
+        prefs!.setBool('logged', true);
         }
-      });
 
-      return right(userModel);
+       
+      });
     } catch (e) {
-      return left(Failure(e.toString()));
+      showSnackbar(context, e.toString());
     }
   }
 

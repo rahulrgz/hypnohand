@@ -7,6 +7,8 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hypnohand/core/model/courseModel.dart';
 import 'package:hypnohand/core/utils.dart';
+import 'package:hypnohand/feature/auth/login/controller/auth_controller.dart';
+import 'package:hypnohand/feature/auth/login/repository/auth_repository.dart';
 import 'package:hypnohand/feature/home/controller/homecontroller.dart';
 import 'package:hypnohand/feature/single_course/screen/single_course.dart';
 import 'package:hypnohand/model/usermodel.dart';
@@ -20,8 +22,6 @@ import '../../../core/common/loader.dart';
 import '../../../core/global_variables/global_variables.dart';
 import '../../../core/theme/pallete.dart';
 
-
-
 class HomeScreen extends ConsumerStatefulWidget {
   const HomeScreen({super.key});
 
@@ -30,17 +30,17 @@ class HomeScreen extends ConsumerStatefulWidget {
 }
 
 class _HomeScreenState extends ConsumerState<HomeScreen> {
-
-
-
-  
   static const _images = [
     'assets/Banner1.jpg',
     'assets/Banner1.jpg',
     'assets/Banner1.jpg',
   ];
 
-  void launchYouTubeVideo(String uri ) async {
+  getUser() {
+    ref.read(authControllerProvider.notifier).getUser();
+  }
+
+  void launchYouTubeVideo(String uri) async {
     final url = Uri.parse(uri.toString());
 
     // Check if the URI is empty or null before attempting to launch
@@ -56,7 +56,13 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     }
   }
 
-
+  @override
+  void initState() {
+    getUser();
+    print('home screeeen------------------------');
+    print(userModel?.email ?? 'email not found');
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -88,7 +94,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                               fontWeight: FontWeight.w300),
                           children: <TextSpan>[
                             TextSpan(
-                              text: userModel?.name??'user',
+                              text: userModel?.name ?? 'user',
                               style: TextStyle(
                                   fontSize: h * 0.022,
                                   color: Palette.primaryColor,
@@ -109,11 +115,11 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                       ),
                     ],
                   ),
-                  CircleAvatar(
-                    radius: w * 0.052,
-                    backgroundImage: NetworkImage(
-                        "https://lh3.googleusercontent.com/a/ACg8ocImL96IeWUFYcO6A0ZFubKe-GLT4qNh8X69LYJjvhdQId1H=s331-c-no"),
-                  ),
+                  // CircleAvatar(
+                  //   radius: w * 0.052,
+                  //   backgroundImage: NetworkImage(
+                  //       "https://lh3.googleusercontent.com/a/ACg8ocImL96IeWUFYcO6A0ZFubKe-GLT4qNh8X69LYJjvhdQId1H=s331-c-no"),
+                  // ),
                 ],
               ),
             ),
@@ -196,79 +202,69 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
             //   ),
             // ),
             ////////////////////////////////////////////////////////////////////////
-            Consumer(builder: (context, ref, child) {
-              return ref.watch(getBannerFuture).when(data: (data) {
-                print(data.toString());
-                if (data.isEmpty) {
-                  // Handle empty slider data
-                  return const Text("No slider images available");
-                }
+            Consumer(
+              builder: (context, ref, child) {
+                return ref.watch(getBannerFuture).when(
+                  data: (data) {
+                    print(data.toString());
+                    if (data.isEmpty) {
+                      // Handle empty slider data
+                      return const Text("No slider images available");
+                    }
 
-                return CarouselSlider(
-                  options: CarouselOptions(
-                    height: h * 0.28,
-                    aspectRatio: 16 / 9,
-                    viewportFraction: 1,
-                    initialPage: 0,
-                    disableCenter: false,
-                    padEnds: true,
-                    enableInfiniteScroll: true,
-                    reverse: false,
-                    autoPlay: true,
-                    autoPlayInterval: const Duration(seconds: 3),
-                    autoPlayAnimationDuration: const Duration(
-                        milliseconds: 800),
-                    autoPlayCurve: Curves.fastOutSlowIn,
-                    enlargeCenterPage: true,
-                    enlargeFactor: 0.0,
-                    scrollDirection: Axis.horizontal,
-                  ),
-                  items: data.map((data) {
-                    print(data);
-                    return Builder(
-                      builder: (BuildContext context) {
-                        return Container(
-
-                          width: MediaQuery
-                              .of(context)
-                              .size
-                              .width,
-                          margin: const EdgeInsets.symmetric(
-                              horizontal: 5.0),
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(12),
-                            image: DecorationImage(
-                              image:
-                              NetworkImage(data.toString()),
-                              fit: BoxFit.fill,
-                            ),
-                          ),
+                    return CarouselSlider(
+                      options: CarouselOptions(
+                        height: h * 0.28,
+                        aspectRatio: 16 / 9,
+                        viewportFraction: 1,
+                        initialPage: 0,
+                        disableCenter: false,
+                        padEnds: true,
+                        enableInfiniteScroll: true,
+                        reverse: false,
+                        autoPlay: true,
+                        autoPlayInterval: const Duration(seconds: 3),
+                        autoPlayAnimationDuration:
+                            const Duration(milliseconds: 800),
+                        autoPlayCurve: Curves.fastOutSlowIn,
+                        enlargeCenterPage: true,
+                        enlargeFactor: 0.0,
+                        scrollDirection: Axis.horizontal,
+                      ),
+                      items: data.map((data) {
+                        print(data);
+                        return Builder(
+                          builder: (BuildContext context) {
+                            return Container(
+                              width: MediaQuery.of(context).size.width,
+                              margin:
+                                  const EdgeInsets.symmetric(horizontal: 5.0),
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(12),
+                                image: DecorationImage(
+                                  image: NetworkImage(data.toString()),
+                                  fit: BoxFit.fill,
+                                ),
+                              ),
+                            );
+                          },
                         );
-                      },
+                      }).toList(),
                     );
-                  }).toList(),
-
+                  },
+                  error: (error, stackTrace) {
+                    print("sa");
+                    return ErrorText(
+                      error: error.toString(),
+                      mess: "saa",
+                    );
+                  },
+                  loading: () {
+                    return const Loader();
+                  },
                 );
-              }
-                , error: (error, stackTrace) {
-                  print("sa");
-                  return ErrorText(
-                    error: error.toString(),
-                    mess: "saa",
-                  );
-
-                }, loading: () {
-                  return const Loader();
-                },);
-
-            },),
-
-
-
-
-
-
-
+              },
+            ),
 
             SizedBox(height: h * 0.02),
             Padding(
@@ -294,74 +290,91 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
               ),
             ),
 
-            Consumer(builder: (context, ref, child) {
-              return ref.watch(getPerformance).when(data: (data) {
-                print(data);
-                return data.isEmpty?Text("empty"):Padding(
-                  padding: EdgeInsets.only(left: w * 0.02),
-                  child: SizedBox(
-                    height: h * 0.175,
-                    child: ListView.builder(
-                      shrinkWrap: true,
-                      physics: BouncingScrollPhysics(),
-                      scrollDirection: Axis.horizontal,
-                      itemCount: data.length,
-                      itemBuilder: (context, index) {
-                        String s=data[index].videolink.toString();
-                        if(s.isEmpty){
-                          print("empty");
-                        }else{
-                          print("not empty");
-                        }
-                        return Padding(
-                          padding: EdgeInsets.fromLTRB(
-                              w * 0.02, w * 0.02, w * 0.03, w * 0.02),
-                          child: GestureDetector(
-                            onTap: () {
-                              launchYouTubeVideo(s);
-                              // FirebaseFirestore.instance.collection("courses").doc("001").update({
-                              //   "search":setSearchParam("Mentalism Malayalam")
-                              // });
-                            },
-                            child: Container(
-                              width: w * 0.5,
-                              decoration: BoxDecoration(
-                                  boxShadow: [
-                                    BoxShadow(
-                                        color: Colors.grey,
-                                        offset: Offset(1, 0),
-                                        blurRadius: 3)
-                                  ],
-                                  color: Palette.whiteColor,
-                                  image: DecorationImage(
-                                      image: NetworkImage(data[index].perfcontent.toString()),
-                                      fit: BoxFit.cover),
-                                  borderRadius: BorderRadius.circular(w * 0.04),
-                                  border: Border.all(color: Colors.grey.shade50)),
-                              child: Container(
-                                width: w * 0.52,
-                                height: h * 0.175,
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(w * 0.04),
-                                  color: Colors.black38,
+            Consumer(
+              builder: (context, ref, child) {
+                return ref.watch(getPerformance).when(
+                      data: (data) {
+                        print(data);
+                        return data.isEmpty
+                            ? Text("empty")
+                            : Padding(
+                                padding: EdgeInsets.only(left: w * 0.02),
+                                child: SizedBox(
+                                  height: h * 0.175,
+                                  child: ListView.builder(
+                                    shrinkWrap: true,
+                                    physics: BouncingScrollPhysics(),
+                                    scrollDirection: Axis.horizontal,
+                                    itemCount: data.length,
+                                    itemBuilder: (context, index) {
+                                      String s =
+                                          data[index].videolink.toString();
+                                      if (s.isEmpty) {
+                                        print("empty");
+                                      } else {
+                                        print("not empty");
+                                      }
+                                      return Padding(
+                                        padding: EdgeInsets.fromLTRB(w * 0.02,
+                                            w * 0.02, w * 0.03, w * 0.02),
+                                        child: GestureDetector(
+                                          onTap: () {
+                                            launchYouTubeVideo(s);
+                                            // FirebaseFirestore.instance.collection("courses").doc("001").update({
+                                            //   "search":setSearchParam("Mentalism Malayalam")
+                                            // });
+                                          },
+                                          child: Container(
+                                            width: w * 0.5,
+                                            decoration: BoxDecoration(
+                                                boxShadow: [
+                                                  BoxShadow(
+                                                      color: Colors.grey,
+                                                      offset: Offset(1, 0),
+                                                      blurRadius: 3)
+                                                ],
+                                                color: Palette.whiteColor,
+                                                image: DecorationImage(
+                                                    image: NetworkImage(
+                                                        data[index]
+                                                            .perfcontent
+                                                            .toString()),
+                                                    fit: BoxFit.cover),
+                                                borderRadius:
+                                                    BorderRadius.circular(
+                                                        w * 0.04),
+                                                border: Border.all(
+                                                    color:
+                                                        Colors.grey.shade50)),
+                                            child: Container(
+                                              width: w * 0.52,
+                                              height: h * 0.175,
+                                              decoration: BoxDecoration(
+                                                borderRadius:
+                                                    BorderRadius.circular(
+                                                        w * 0.04),
+                                                color: Colors.black38,
+                                              ),
+                                              child: Icon(
+                                                CupertinoIcons.play_circle,
+                                                color: Colors.white,
+                                                size: w * 0.1,
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                      );
+                                    },
+                                  ),
                                 ),
-                                child: Icon(
-                                  CupertinoIcons.play_circle,
-                                  color: Colors.white,
-                                  size: w * 0.1,
-                                ),
-                              ),
-                            ),
-                          ),
-                        );
+                              );
                       },
-                    ),
-                  ),
-                );
-
-              }, error:(error, stackTrace) => ErrorText(error: error.toString()), loading: () => Loader(),);
-            },
-    ),
+                      error: (error, stackTrace) =>
+                          ErrorText(error: error.toString()),
+                      loading: () => Loader(),
+                    );
+              },
+            ),
 
             SizedBox(height: h * 0.03),
             Padding(
@@ -386,97 +399,124 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                 ],
               ),
             ),
-            Consumer(builder: (context, ref, child) {
-              return ref.watch(getCourseList).when(data: (data) {
-                return data.isEmpty?Text("No courses"):Padding(
-                  padding: EdgeInsets.only(left: w * 0.02),
-                  child: SizedBox(
-                    height: h * 0.255,
-                    child: ListView.builder(
-                      shrinkWrap: true,
-                      physics: BouncingScrollPhysics(),
-                      scrollDirection: Axis.horizontal,
-                      itemCount: data.length,
-                      itemBuilder: (context, index) {
-                        coursemodell=data[index];
+            Consumer(
+              builder: (context, ref, child) {
+                return ref.watch(getCourseList).when(
+                      data: (data) {
+                        return data.isEmpty
+                            ? Text("No courses")
+                            : Padding(
+                                padding: EdgeInsets.only(left: w * 0.02),
+                                child: SizedBox(
+                                  height: h * 0.255,
+                                  child: ListView.builder(
+                                    shrinkWrap: true,
+                                    physics: BouncingScrollPhysics(),
+                                    scrollDirection: Axis.horizontal,
+                                    itemCount: data.length,
+                                    itemBuilder: (context, index) {
+                                      coursemodell = data[index];
 
-                        return Padding(
-                          padding: EdgeInsets.fromLTRB(
-                              w * 0.02, w * 0.02, w * 0.03, w * 0.02),
-                          child: GestureDetector(
-                            onTap: () {
-
-                              Navigator.push(
-                                context,
-                                CupertinoPageRoute(
-                                  builder: (context) => CourseSingleView(
-                                    courseModel: data[index],
+                                      return Padding(
+                                        padding: EdgeInsets.fromLTRB(w * 0.02,
+                                            w * 0.02, w * 0.03, w * 0.02),
+                                        child: GestureDetector(
+                                          onTap: () {
+                                            Navigator.push(
+                                              context,
+                                              CupertinoPageRoute(
+                                                builder: (context) =>
+                                                    CourseSingleView(
+                                                  courseModel: data[index],
+                                                ),
+                                              ),
+                                            );
+                                          },
+                                          child: SizedBox(
+                                            width: w * 0.5,
+                                            child: Column(
+                                              mainAxisSize: MainAxisSize.min,
+                                              children: [
+                                                ClipRRect(
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            w * 0.04),
+                                                    child: Image.network(
+                                                      "${data[index].thumbnailImage.toString()}",
+                                                      width: w * 0.5,
+                                                      height: h * 0.15,
+                                                      fit: BoxFit.cover,
+                                                    )),
+                                                Padding(
+                                                  padding: EdgeInsets.fromLTRB(
+                                                      w * 0.01,
+                                                      h * 0.003,
+                                                      w * 0.01,
+                                                      0),
+                                                  child: Text(
+                                                    data[index]
+                                                        .coursename
+                                                        .toString(),
+                                                    maxLines: 2,
+                                                    overflow:
+                                                        TextOverflow.ellipsis,
+                                                    style: TextStyle(
+                                                        color:
+                                                            Palette.blackColor,
+                                                        fontSize: h * 0.018,
+                                                        fontWeight:
+                                                            FontWeight.w500),
+                                                  ),
+                                                ),
+                                                Padding(
+                                                  padding: EdgeInsets.fromLTRB(
+                                                      w * 0.01, 0, w * 0.02, 0),
+                                                  child: Row(
+                                                    crossAxisAlignment:
+                                                        CrossAxisAlignment
+                                                            .center,
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment.start,
+                                                    children: [
+                                                      // Text(
+                                                      //   "16 Students",
+                                                      //   style: TextStyle(
+                                                      //       color: Palette.blackColor,
+                                                      //       fontSize: w * 0.029,
+                                                      //       fontWeight: FontWeight.w400),
+                                                      // ),
+                                                      Spacer(),
+                                                      Icon(CupertinoIcons.star,
+                                                          size: w * 0.03),
+                                                      Text(
+                                                        " 4.5",
+                                                        style: TextStyle(
+                                                            color: Palette
+                                                                .blackColor,
+                                                            fontSize: w * 0.032,
+                                                            fontWeight:
+                                                                FontWeight
+                                                                    .w500),
+                                                      ),
+                                                    ],
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                        ),
+                                      );
+                                    },
                                   ),
                                 ),
                               );
-                            },
-                            child: SizedBox(
-                              width: w * 0.5,
-                              child: Column(
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  ClipRRect(
-                                    borderRadius: BorderRadius.circular(w * 0.04),
-                                    child: Image.network("${data[index].thumbnailImage.toString()}",
-                                      width: w * 0.5,
-                                      height: h * 0.15,
-                                      fit: BoxFit.cover,)
-                                  ),
-                                  Padding(
-                                    padding: EdgeInsets.fromLTRB(
-                                        w * 0.01, h * 0.003, w * 0.01, 0),
-                                    child: Text(data[index].coursename.toString(),
-                                      maxLines: 2,
-                                      overflow: TextOverflow.ellipsis,
-                                      style: TextStyle(
-                                          color: Palette.blackColor,
-                                          fontSize: h * 0.018,
-                                          fontWeight: FontWeight.w500),
-                                    ),
-                                  ),
-                                  Padding(
-                                    padding: EdgeInsets.fromLTRB(
-                                        w * 0.01, 0, w * 0.02, 0),
-                                    child: Row(
-                                      crossAxisAlignment: CrossAxisAlignment.center,
-                                      mainAxisAlignment: MainAxisAlignment.start,
-                                      children: [
-                                        // Text(
-                                        //   "16 Students",
-                                        //   style: TextStyle(
-                                        //       color: Palette.blackColor,
-                                        //       fontSize: w * 0.029,
-                                        //       fontWeight: FontWeight.w400),
-                                        // ),
-                                        Spacer(),
-                                        Icon(CupertinoIcons.star, size: w * 0.03),
-                                        Text(
-                                          " 4.5",
-                                          style: TextStyle(
-                                              color: Palette.blackColor,
-                                              fontSize: w * 0.032,
-                                              fontWeight: FontWeight.w500),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ),
-                        );
                       },
-                    ),
-                  ),
-                );
-              }, error: (error, stackTrace) =>
-                  ErrorText(error: error.toString()), loading: () => Loader(),);
-            },),
+                      error: (error, stackTrace) =>
+                          ErrorText(error: error.toString()),
+                      loading: () => Loader(),
+                    );
+              },
+            ),
             SizedBox(height: h * 0.01),
             Padding(
               padding: EdgeInsets.fromLTRB(w * 0.04, 0, w * 0.04, h * 0.01),

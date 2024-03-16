@@ -107,6 +107,10 @@ class AuthController extends StateNotifier<bool> {
     );
   }
 
+  getUser() {
+    _authRepository.getUser();
+  }
+
   Stream<UserModel> getUserData(String uid) {
     return _authRepository.getUserData(uid);
   }
@@ -180,18 +184,19 @@ class AuthController extends StateNotifier<bool> {
       required BuildContext context,
       required WidgetRef ref}) async {
     final res = await _authRepository.signInWithEmailAndPassword(
-        email: email, password: password, context: context,ref:ref );
+        email: email, password: password, context: context, ref: ref);
 
-    res.fold((l) => Failure(l.message),
-     (r) {
-      Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(
-        builder: (context) {
-          return BottomNav();
-        },
-      ), (route) => false);
+    res.fold(
+      (l) => Failure(l.message),
+      (r) {
+        Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(
+          builder: (context) {
+            return BottomNav();
+          },
+        ), (route) => false);
 
-      prefs!.setBool('logged', true);
-     },
+        prefs!.setBool('logged', true);
+      },
     );
   }
 
@@ -251,5 +256,4 @@ class AuthController extends StateNotifier<bool> {
 //         }), (route) => false);
 //       });
 //   }
-
 }
