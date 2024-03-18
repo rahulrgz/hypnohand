@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:hypnohand/core/constands/image_constants.dart';
 import 'package:hypnohand/core/model/courseModel.dart';
 import 'package:hypnohand/core/utils.dart';
 import 'package:hypnohand/feature/auth/login/controller/auth_controller.dart';
@@ -115,11 +116,10 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                       ),
                     ],
                   ),
-                  // CircleAvatar(
-                  //   radius: w * 0.052,
-                  //   backgroundImage: NetworkImage(
-                  //       "https://lh3.googleusercontent.com/a/ACg8ocImL96IeWUFYcO6A0ZFubKe-GLT4qNh8X69LYJjvhdQId1H=s331-c-no"),
-                  // ),
+                  CircleAvatar(
+                    radius: w * 0.05,
+                    backgroundImage: AssetImage(Constants.logo),
+                  ),
                 ],
               ),
             ),
