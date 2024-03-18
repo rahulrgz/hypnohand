@@ -238,8 +238,7 @@ class _GoogleApplesigninState extends ConsumerState<GoogleApplesignin> {
           width: w * 0.91,
           height: h * 0.07,
           decoration: BoxDecoration(
-              color: profileColor,
-              borderRadius: BorderRadius.circular(w * 0.1)),
+              color: orangeColor, borderRadius: BorderRadius.circular(w * 0.1)),
           child: Center(
             child: Text(
               "Submit",
