@@ -3,47 +3,94 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:fpdart/fpdart.dart';
+import 'package:hypnohand/core/utils.dart';
+import 'package:hypnohand/model/courseModel.dart';
+import 'package:hypnohand/model/usermodel.dart';
 import 'package:razorpay_flutter/razorpay_flutter.dart';
 import '../../../core/constants/firebase_constants.dart';
 import '../../../model/razorpay_Response.dart';
 import 'razor_credentials.dart' as razorCredentials;
-import 'package:http/http.dart'as http;
+import 'package:http/http.dart' as http;
 
 class PaymentScreen extends ConsumerStatefulWidget {
-  PaymentScreen({super.key});
+  final CourseModel data;
+  PaymentScreen({required this.data});
 
   @override
   ConsumerState<PaymentScreen> createState() => _PaymentScreenState();
 }
 
 class _PaymentScreenState extends ConsumerState<PaymentScreen> {
+  late Razorpay _razorpay;
+  final paymentStatusProvider = StateProvider((ref) => 'Not Initiated');
+
   CollectionReference get _razorpaySuccess =>
       FirebaseFirestore.instance.collection(FirebaseConstants.razorpaySuccess);
 
-  onPaymentSuccess({required double price,required double discount,required String courseName,required String subName,required Map<dynamic,dynamic>response}){
-    RazorPayResponseModel data= RazorPayResponseModel(
-        price: price, discount: discount, courseName: courseName, subName: subName, response: response,purchaseDate: DateTime.now()
-    );
-    _razorpaySuccess.add(data.toMap());
+  CollectionReference get _courses =>
+      FirebaseFirestore.instance.collection(FirebaseConstants.courses);
+
+  TextEditingController amtController = TextEditingController();
+  String? coursePrice;
+
+  @override
+  void initState() {
+    _razorpay = Razorpay();
+    _razorpay.on(Razorpay.EVENT_PAYMENT_SUCCESS, handlePaymentSucces);
+    _razorpay.on(Razorpay.EVENT_PAYMENT_ERROR, handlePaymentError);
+    _razorpay.on(Razorpay.EVENT_EXTERNAL_WALLET, handleExternalWallet);
+    coursePrice =widget.data.ogprice+'00';
+    super.initState();
   }
 
-  final paymentStatusProvider=StateProvider((ref) => 'Not Initiated');
+  onPaymentSuccess(
+      {required String price,
+      required double discount,
+      required String courseName,
+      required String subName,
+      required Map<dynamic, dynamic> response}) {
+    print(price);
+    print('ente price------------');
+    RazorPayResponseModel data = RazorPayResponseModel(
+        price: price,
+        discount: discount,
+        courseName: courseName,
+        subName: subName,
+        response: response,
+        purchaseDate: DateTime.now());
+    _razorpaySuccess.add(data.toMap());
 
-  final _razorpay =Razorpay();
-  TextEditingController amtController = TextEditingController();
+    List _newStudentList = widget.data.listofstudents;
+    _newStudentList.add(userModel!.id!);
+    print(_newStudentList);
+    print('new list----------');
+
+    CourseModel _courseUpdateData =
+        coursemodell!.copyWith(listofstudents: _newStudentList);
+
+    _courses
+        .doc(widget.data.docid)
+        .update(_courseUpdateData.toMap())
+        .then((value) {
+      showSnackbar(context, 'Courses are now unlocked');
+    });
+  }
 
   // create order
   void createOrder() async {
-    String username = razorCredentials.keyId;//key id you get from razorpay from settings
-    String password = razorCredentials.keySecret;//this tooo
+    String username =
+        razorCredentials.keyId; //key id you get from razorpay from settings
+    String password = razorCredentials.keySecret; //this tooo
     String basicAuth =
-        'Basic ${base64Encode(utf8.encode('$username:$password'))}';//this api required basic auth user and pass.
+        'Basic ${base64Encode(utf8.encode('$username:$password'))}'; //this api required basic auth user and pass.
 
     Map<String, dynamic> body = {
-      "amount": 100,
+      "amount": coursePrice,
       "currency": "INR",
       "receipt": "rcptid_11"
     };
+
     var res = await http.post(
       Uri.https(
           "api.razorpay.com", "v1/orders"), //https://api.razorpay.com/v1/orders
@@ -53,7 +100,8 @@ class _PaymentScreenState extends ConsumerState<PaymentScreen> {
       },
       body: jsonEncode(body),
     );
-
+    print(res.statusCode);
+    print("res.statusCode----------");
     if (res.statusCode == 200) {
       ///on success move to second step checkout.
       ///in response on create order id pass it to checkout.
@@ -63,53 +111,81 @@ class _PaymentScreenState extends ConsumerState<PaymentScreen> {
   }
 
   openGateway(String orderId) {
+    print(coursePrice);
+    print("funda price===========");
     var options = {
-      'key': razorCredentials.keyId,///key id from razorpay
-      'amount': 100, ///in the smallest currency sub-unit.
+      'key': razorCredentials.keyId,
+
+      ///key id from razorpay
+      'amount': coursePrice! ,
+
+      ///in the smallest currency sub-unit.
       'name': 'Hypno Hand.',
-      'order_id': orderId, /// Generate order_id using Orders API
+      'order_id': orderId,
+
+      /// Generate order_id using Orders API
+
       'description': 'Course 1  ',
-      'timeout': 60 * 5, /// in seconds // 5 minutes
+      'timeout': 60 * 5,
+
+      /// in seconds // 5 minutes
+
       'prefill': {
-        'contact': '9123456789',
-        'email': 'hypnosupport@example.com',
-      }
+        'contact': userModel?.phoneNumber??'',
+        'email': userModel?.email??'',
+      },
+      'external': {
+        'wallets': ['paytm']
+      },
     };
-    _razorpay.open(options);///open gateway for checkout
+    _razorpay.open(options);
+
+    ///open gateway for checkout
     ///now to check responses thats success or failed etc , you will get those in listener.
   }
 
   void handlePaymentSucces(PaymentSuccessResponse response) {
-      ref.read(paymentStatusProvider.notifier).update((state) => 'Payment Successfull');
-      onPaymentSuccess(price: 1299, discount: 0, courseName: 'course 1', subName: 'course 1', response: {});
-      print(response.signature);
-      print(response.paymentId);
-      print(response.orderId);
-      // print(response.data);
-      
-      print("success response-------------");
-      ///on success we will verify signature to check authenticity
+    ref
+        .read(paymentStatusProvider.notifier)
+        .update((state) => 'Payment Successfull');
+    onPaymentSuccess(
+        price: coursePrice??'' ,
+        discount: 0,
+        courseName: 'course 1',
+        subName: 'course 1',
+        response: {});
+    print(response.signature);
+    print(response.paymentId);
+    print(response.orderId);
+    // print(response.data);
 
-      verifySignature(
-        orderId: response.orderId,
-        paymentId: response.paymentId,
-        signature: response.signature,
-      );
+    print("success response-------------");
+
+    ///on success we will verify signature to check authenticity
+
+    verifySignature(
+      orderId: response.orderId,
+      paymentId: response.paymentId,
+      signature: response.signature,
+    );
+
     ///course purchased...
     Fluttertoast.showToast(
-        msg: "payment Successfull " + response.paymentId!,
-        toastLength: Toast.LENGTH_SHORT,
+      msg: "payment Successfull " + response.paymentId!,
+      toastLength: Toast.LENGTH_SHORT,
     );
   }
 
   void handlePaymentError(PaymentFailureResponse response) {
-        ref.read(paymentStatusProvider.notifier).update((state) => 'Payment Failed');
-        print( response);
-        print(response.message);
-        // print(response.error);
-        print(response.code);
+    ref
+        .read(paymentStatusProvider.notifier)
+        .update((state) => 'Payment Failed');
+    print(response);
+    print(response.message);
+    // print(response.error);
+    print(response.code);
 
-        print('failure response----------------------');
+    print('failure response----------------------');
 
     Fluttertoast.showToast(
         msg: "Payment Failed " + response.message!,
@@ -123,7 +199,8 @@ class _PaymentScreenState extends ConsumerState<PaymentScreen> {
         msg: "External Wallet " + response.walletName!,
         toastLength: Toast.LENGTH_SHORT);
   }
-///i hv written php code on server side to verify signature.
+
+  ///i hv written php code on server side to verify signature.
   ///below fuction is to call the api.
   verifySignature({
     String? signature,
@@ -156,9 +233,12 @@ class _PaymentScreenState extends ConsumerState<PaymentScreen> {
 
     print(res.body);
     if (res.statusCode == 200) {
+      print("payment Verified--");
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text(res.body),///we are showing response from signature verification api
+          content: Text(res.body),
+
+          ///we are showing response from signature verification api
         ),
       );
     }
@@ -171,17 +251,9 @@ class _PaymentScreenState extends ConsumerState<PaymentScreen> {
   }
 
   @override
-  void initState() {
-    _razorpay.on(Razorpay.EVENT_PAYMENT_SUCCESS, handlePaymentSucces);
-    _razorpay.on(Razorpay.EVENT_PAYMENT_ERROR, handlePaymentError);
-    _razorpay.on(Razorpay.EVENT_EXTERNAL_WALLET, handleExternalWallet);
-    super.initState();
-  }
-
-  @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.grey[800],
+      backgroundColor: Colors.grey[200],
       body: SingleChildScrollView(
         child: Center(
           child: Column(
@@ -196,31 +268,40 @@ class _PaymentScreenState extends ConsumerState<PaymentScreen> {
               Text(
                 'Purchase this course for 1,299',
                 style: TextStyle(
-                    color: Colors.white,
-                    fontWeight: FontWeight.bold,
-                    fontSize: 18,
+                  color: Colors.black,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 18,
                 ),
                 textAlign: TextAlign.center,
               ),
               SizedBox(
                 height: 30,
               ),
-
-              SizedBox(height: 30,),
-              ElevatedButton(onPressed: () {
-              createOrder();
+              SizedBox(
+                height: 30,
+              ),
+              ElevatedButton(
+                  onPressed: () {
+                    createOrder();
+                  },
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Text('Make Payement'),
+                  )),
+              SizedBox(
+                height: 30,
+              ),
+              Consumer(
+                builder: (context, ref, child) {
+                  return Text(
+                    "Payment Status: ${ref.watch(paymentStatusProvider)},",
+                    style: TextStyle(
+                      color: Colors.black,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 18,
+                    ),
+                  );
                 },
-               child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Text('Make Payement'),
-              )),
-              Consumer(builder: (context, ref, child) {
-                return Text("Payment Status: ${ref.watch(paymentStatusProvider)},",style: TextStyle(
-                  color: Colors.white,
-                  fontWeight: FontWeight.bold,
-                  fontSize: 18,
-                ),);
-              },
               )
             ],
           ),

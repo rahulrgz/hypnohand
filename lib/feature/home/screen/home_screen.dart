@@ -6,7 +6,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hypnohand/core/constands/image_constants.dart';
-import 'package:hypnohand/core/model/courseModel.dart';
+import 'package:hypnohand/model/courseModel.dart';
 import 'package:hypnohand/core/utils.dart';
 import 'package:hypnohand/feature/auth/login/controller/auth_controller.dart';
 import 'package:hypnohand/feature/auth/login/repository/auth_repository.dart';

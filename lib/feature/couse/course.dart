@@ -1,10 +1,11 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hypnohand/core/common/error_text.dart';
 import 'package:hypnohand/core/common/loader.dart';
-import 'package:hypnohand/core/model/courseModel.dart';
+import 'package:hypnohand/model/courseModel.dart';
 import 'package:hypnohand/feature/home/controller/homecontroller.dart';
 
 import '../../core/global_variables/global_variables.dart';
@@ -126,13 +127,16 @@ class _AllCourseState extends State<AllCourse> {
                             child: Row(
                               children: [
                                 Container(
-                                  width: w * 0.3,
+                                  width: w * 0.31,
                                   decoration: BoxDecoration(
                                       borderRadius: BorderRadius.circular(w * 0.03),
                                       image: DecorationImage(
-                                          image: NetworkImage(
-                                              "https://imgs.search.brave.com/k9eYS2reZrZ0ZG5zxUXIrbxU4ae9mhgZyH1icMCqcb8/rs:fit:860:0:0/g:ce/aHR0cHM6Ly9pMS53/cC5jb20vd3d3Lm1l/bnRhbGlzbXByby5j/b20vd3AtY29udGVu/dC91cGxvYWRzL21l/bnRhbGlzbS1jb3Vy/c2UuanBnP3Jlc2l6/ZT02MDAsNDAwJnNz/bD0x"),
-                                          fit: BoxFit.cover)),
+                                          image: CachedNetworkImageProvider(
+                                            '${data[index].thumbnailImage}',
+                                              // "https://imgs.search.brave.com/k9eYS2reZrZ0ZG5zxUXIrbxU4ae9mhgZyH1icMCqcb8/rs:fit:860:0:0/g:ce/aHR0cHM6Ly9pMS53/cC5jb20vd3d3Lm1l/bnRhbGlzbXByby5j/b20vd3AtY29udGVu/dC91cGxvYWRzL21l/bnRhbGlzbS1jb3Vy/c2UuanBnP3Jlc2l6/ZT02MDAsNDAwJnNz/bD0x",
+                                               
+                                              ),
+                                          fit: BoxFit.fill)),
                                 ),
                                 SizedBox(width: w * 0.036),
                                 Column(

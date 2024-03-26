@@ -186,18 +186,18 @@ class AuthController extends StateNotifier<bool> {
     final res = await _authRepository.signInWithEmailAndPassword(
         email: email, password: password, context: context, ref: ref);
 
-    res.fold(
-      (l) => Failure(l.message),
-      (r) {
-        Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(
-          builder: (context) {
-            return BottomNav();
-          },
-        ), (route) => false);
+    // res.fold(
+    //   (l) => Failure(l.message),
+    //   (r) {
+    //     Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(
+    //       builder: (context) {
+    //         return BottomNav();
+    //       },
+    //     ), (route) => false);
 
-        prefs!.setBool('logged', true);
-      },
-    );
+    //     prefs!.setBool('logged', true);
+    //   },
+    // );
   }
 
   createUserWithEmailAndPassword({

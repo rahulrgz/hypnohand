@@ -1,6 +1,6 @@
 
 class RazorPayResponseModel{
-  double price;
+  String price;
   double discount;
   String courseName;
   String subName;
@@ -29,7 +29,7 @@ class RazorPayResponseModel{
 
   factory RazorPayResponseModel.fromMap(Map<String, dynamic> map) {
     return RazorPayResponseModel(
-      price: map['price'] as double,
+      price: map['price'] as String,
       discount: map['discount'] as double,
       courseName: map['courseName'] as String,
       subName: map['subName'] as String,
@@ -39,7 +39,7 @@ class RazorPayResponseModel{
   }
 
   RazorPayResponseModel copyWith({
-    double? price,
+    String? price,
     double? discount,
     String? courseName,
     String? subName,

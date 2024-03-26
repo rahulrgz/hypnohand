@@ -1,8 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:hypnohand/core/model/announcementmodel.dart';
-import 'package:hypnohand/core/model/courseModel.dart';
-import 'package:hypnohand/core/model/performanceModel.dart';
+import 'package:hypnohand/model/announcementmodel.dart';
+import 'package:hypnohand/model/courseModel.dart';
+import 'package:hypnohand/model/performanceModel.dart';
 import 'package:hypnohand/feature/home/repository/homerepository.dart';
 final homeControllerProvider=Provider((ref) => HomeController(homeRepository: ref.watch(homeRepositoryProvider), ref: ref));
 final getBannerFuture=FutureProvider((ref) => ref.watch(homeControllerProvider).getBanners());

@@ -3,9 +3,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hypnohand/core/constants/providers/firebase_providers.dart';
-import 'package:hypnohand/core/model/announcementmodel.dart';
-import 'package:hypnohand/core/model/courseModel.dart';
-import 'package:hypnohand/core/model/performanceModel.dart';
+import 'package:hypnohand/model/announcementmodel.dart';
+import 'package:hypnohand/model/courseModel.dart';
+import 'package:hypnohand/model/performanceModel.dart';
 final homeRepositoryProvider=Provider((ref) => HomeRepository(firestore: ref.watch(firestoreProvider)));
 
 class HomeRepository

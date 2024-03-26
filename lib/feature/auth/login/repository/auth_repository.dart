@@ -218,7 +218,7 @@ class AuthRepository {
       return left(Failure(e.toString()));
     }
   }
-// //
+
 //    FutureEither<UserModel?> signInWithEmailAndPassword({
 //     required String password,
 //     required String email,
@@ -228,7 +228,6 @@ class AuthRepository {
 //     try {
 //       print('signin with email and password');
 //       String deviceId = ref.read(devideIdProvider) ?? 'Devide Id';
-
 //     var user=await  FirebaseAuth.instance
 //           .signInWithEmailAndPassword(email: email, password: password)
 //           .then((value) async {
@@ -236,21 +235,16 @@ class AuthRepository {
 //             .collection(FirebaseConstants.usersCollection)
 //             .where('email', isEqualTo: email)
 //             .get();
-
 //         userModel = UserModel.fromJson(user.docs.first.data());
 //         print(userModel?.email ?? 'email');
 //         print('email=================');
-
 //         var sessionsDoc = await _sessions.doc(userModel!.id).get();
-
-//         if (sessionsDoc.exists) {
+//        if (sessionsDoc.exists) {
 //           print(sessionsDoc.reference);
 //           print('reference');
 //           print('sessionDocExists--------------');
-
 //           sessionsModel = SessionsModel.fromJson(
 //               sessionsDoc.data() as Map<String, dynamic>);
-
 //           if (sessionsModel!.deviceId == deviceId) {
 //             print("device id same----------------");
 //             Navigator.push(
@@ -274,19 +268,16 @@ class AuthRepository {
 //               .collection(FirebaseConstants.usersCollection)
 //               .where('email', isEqualTo: email)
 //               .get();
-
 //           userModel = UserModel.fromJson(user.docs.first.data());
 //           print(userModel!.name);
 //           SessionsModel data = SessionsModel(
 //             deviceId: deviceId,
 //             lastLoggin: DateTime.now(),
 //           );
-
 //           _sessions.doc(userModel!.id).set(data.toJson());
 //           return right(userModel);
 //         }
 //       });
-
 //       return right(userModel);
 //     } catch (e) {
 //       return left(Failure(e.toString()));
@@ -328,6 +319,7 @@ class AuthRepository {
               ),
             );
             prefs!.setBool('logged', true);
+             prefs!.setString('currentuserId', userModel!.id!);
           } else {
             print('device id not same----------');
             showSnackbar(
@@ -349,6 +341,7 @@ class AuthRepository {
           ),
         );
         prefs!.setBool('logged', true);
+         prefs!.setString('currentuserId', currentUserId!);
         }
 
        
