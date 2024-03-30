@@ -112,6 +112,7 @@ class AuthRepository {
         });
         return right(null);
       } else {
+        print("old user");
         var sessionsDoc = await _sessions.doc(currentUserId).get();
 
         if (sessionsDoc.exists) {
@@ -309,8 +310,8 @@ class AuthRepository {
           sessionsModel = SessionsModel.fromJson(
               sessionsDoc.data() as Map<String, dynamic>);
 
-              ///check if current session's device id is equal to current device id...
-               if (sessionsModel!.deviceId == deviceId) {
+          ///check if current session's device id is equal to current device id...
+          if (sessionsModel!.deviceId == deviceId) {
             print("device id same----------------");
             Navigator.push(
               context,
@@ -319,14 +320,13 @@ class AuthRepository {
               ),
             );
             prefs!.setBool('logged', true);
-             prefs!.setString('currentuserId', userModel!.id!);
+            prefs!.setString('currentuserId', userModel!.id!);
           } else {
             print('device id not same----------');
             showSnackbar(
                 context, 'this account is already logged in on another device');
           }
-        }else{
-
+        } else {
           SessionsModel data = SessionsModel(
             deviceId: deviceId,
             lastLoggin: DateTime.now(),
@@ -334,17 +334,15 @@ class AuthRepository {
 
           _sessions.doc(userModel!.id).set(data.toJson());
 
-           Navigator.push(
-          context,
-          CupertinoPageRoute(
-            builder: (context) => const BottomNav(),
-          ),
-        );
-        prefs!.setBool('logged', true);
-         prefs!.setString('currentuserId', currentUserId!);
+          Navigator.push(
+            context,
+            CupertinoPageRoute(
+              builder: (context) => const BottomNav(),
+            ),
+          );
+          prefs!.setBool('logged', true);
+          prefs!.setString('currentuserId', currentUserId!);
         }
-
-       
       });
     } catch (e) {
       showSnackbar(context, e.toString());

@@ -57,10 +57,10 @@ class _PerformenceState extends State<Performence> {
                       fontWeight: FontWeight.w500),
                 ),
                 Spacer(),
-                Icon(
-                  CupertinoIcons.info_circle,
-                  size: h * 0.024,
-                ),
+                // Icon(
+                //   CupertinoIcons.info_circle,
+                //   size: h * 0.024,
+                // ),
                 SizedBox(width: w * 0.04),
               ],
             ),

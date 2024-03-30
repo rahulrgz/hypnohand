@@ -4,6 +4,7 @@ import 'package:hypnohand/model/announcementmodel.dart';
 import 'package:hypnohand/model/courseModel.dart';
 import 'package:hypnohand/model/performanceModel.dart';
 import 'package:hypnohand/feature/home/repository/homerepository.dart';
+
 final homeControllerProvider=Provider((ref) => HomeController(homeRepository: ref.watch(homeRepositoryProvider), ref: ref));
 final getBannerFuture=FutureProvider((ref) => ref.watch(homeControllerProvider).getBanners());
 final getPerformance=FutureProvider((ref) => ref.watch(homeControllerProvider).getPerformance());

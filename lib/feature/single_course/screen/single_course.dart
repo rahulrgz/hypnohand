@@ -400,11 +400,14 @@ class _CourseSingleViewState extends ConsumerState<CourseSingleView> {
                           fontSize: w * 0.044,
                           fontWeight: FontWeight.w500),
                     ),
-                    Icon(
-                      Icons.more_vert_rounded,
-                      color: Palette.blackColor,
-                      size: w * 0.06,
-                    ),
+                    // Icon(
+                    //   Icons.more_vert_rounded,
+                    //   color: Palette.blackColor,
+                    //   size: w * 0.06,
+                    // ),
+                    SizedBox(
+                      width:  w * 0.06,
+                    )
                   ],
                 ),
               ),
@@ -587,6 +590,7 @@ class _CourseSingleViewState extends ConsumerState<CourseSingleView> {
                                                   color: Colors.black54,
                                                 ),
                                                 child: Icon(
+
                                                   Icons.lock_outline_rounded,
                                                   color: Colors.white,
                                                 ),

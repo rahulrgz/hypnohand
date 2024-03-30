@@ -45,10 +45,10 @@ class _AllCourseState extends State<AllCourse> {
                       fontWeight: FontWeight.w500),
                 ),
                 Spacer(),
-                Icon(
-                  CupertinoIcons.info_circle,
-                  size: h * 0.024,
-                ),
+                // Icon(
+                //   CupertinoIcons.info_circle,
+                //   size: h * 0.024,
+                // ),
                 SizedBox(width: w * 0.05),
               ],
             ),
@@ -170,10 +170,10 @@ class _AllCourseState extends State<AllCourse> {
                                               ),
                                             ),
                                           ),
-                                          Icon(
-                                            CupertinoIcons.bookmark,
-                                            size: h * 0.025,
-                                          )
+                                          // Icon(
+                                          //   CupertinoIcons.bookmark,
+                                          //   size: h * 0.025,
+                                          // )
                                         ],
                                       ),
                                     ),

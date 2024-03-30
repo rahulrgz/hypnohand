@@ -44,10 +44,10 @@ class _SavedCourseState extends State<SavedCourse> {
                       fontWeight: FontWeight.w500),
                 ),
                 Spacer(),
-                Icon(
-                  CupertinoIcons.info_circle,
-                  size: h * 0.024,
-                ),
+                // Icon(
+                //   CupertinoIcons.info_circle,
+                //   size: h * 0.024,
+                // ),
                 SizedBox(width: w * 0.05),
               ],
             ),
@@ -158,10 +158,10 @@ class _SavedCourseState extends State<SavedCourse> {
                                             ),
                                           ),
                                         ),
-                                        Icon(
-                                          CupertinoIcons.bookmark_fill,
-                                          size: h * 0.025,
-                                        )
+                                        // Icon(
+                                        //   CupertinoIcons.bookmark_fill,
+                                        //   size: h * 0.025,
+                                        // )
                                       ],
                                     ),
                                   ),
