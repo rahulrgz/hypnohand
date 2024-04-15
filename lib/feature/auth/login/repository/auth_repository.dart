@@ -147,11 +147,12 @@ class AuthRepository {
           }
         } else {
           SessionsModel data = SessionsModel(
-            deviceId: deviceId,
+            deviceId: '',
             lastLoggin: DateTime.now(),
           );
 
-          _sessions.doc(currentUserId).set(data.toJson());
+          ///document generated
+          ///_sessions.doc(currentUserId).set(data.toJson());
           return right(userModel);
         }
       }

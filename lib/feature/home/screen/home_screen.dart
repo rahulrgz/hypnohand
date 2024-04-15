@@ -1,5 +1,4 @@
 import 'package:carousel_slider/carousel_slider.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -15,7 +14,6 @@ import 'package:hypnohand/model/usermodel.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../../../core/common/error_text.dart';
-import '../../../core/common/loader.dart';
 import '../../../core/global_variables/global_variables.dart';
 import '../../../core/theme/pallete.dart';
 
@@ -27,7 +25,7 @@ class HomeScreen extends ConsumerStatefulWidget {
 }
 
 class _HomeScreenState extends ConsumerState<HomeScreen> {
-  bool PerformanceDataLoaded=false;
+  bool performanceDataLoaded=true;
 
   static const _images = [
     'assets/Banner1.jpg',
@@ -299,82 +297,81 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                                 padding: EdgeInsets.only(left: w * 0.02),
                                 child: SizedBox(
                                   height: h * 0.175,
-                                  child: Shimmer.fromColors(
-                                    baseColor: Colors.grey.shade200,
-                                    highlightColor: Colors.white,
-                                    enabled: !PerformanceDataLoaded,
-                                    child: ListView.builder(
-                                      shrinkWrap: true,
-                                      physics: BouncingScrollPhysics(),
-                                      scrollDirection: Axis.horizontal,
-                                      itemCount: data.length,
-                                      itemBuilder: (context, index) {
-                                        String s =
-                                            data[index].videolink.toString();
-                                        if (s.isEmpty) {
-                                          print("empty");
-                                        } else {
-                                          print("not empty");
-                                        }
-                                        return Padding(
-                                          padding: EdgeInsets.fromLTRB(w * 0.02,
-                                              w * 0.02, w * 0.03, w * 0.02),
-                                          child: GestureDetector(
-                                            onTap: () {
-                                              launchYouTubeVideo(s);
-                                              // FirebaseFirestore.instance.collection("courses").doc("001").update({
-                                              //   "search":setSearchParam("Mentalism Malayalam")
-                                              // });
-                                            },
+                                  child: ListView.builder(
+                                    shrinkWrap: true,
+                                    physics: BouncingScrollPhysics(),
+                                    scrollDirection: Axis.horizontal,
+                                    itemCount: data.length,
+
+                                    itemBuilder: (context, index) {
+                                      // if(data.length>0){
+                                      //   performanceDataLoaded=false;
+                                      // }
+                                      String s =
+                                          data[index].videolink.toString();
+                                      if (s.isEmpty) {
+                                        print("empty");
+                                      } else {
+                                        print("not empty");
+                                      }
+                                      return Padding(
+                                        padding: EdgeInsets.fromLTRB(w * 0.02,
+                                            w * 0.02, w * 0.03, w * 0.02),
+                                        child: GestureDetector(
+                                          onTap: () {
+                                            launchYouTubeVideo(s);
+                                            // FirebaseFirestore.instance.collection("courses").doc("001").update({
+                                            //   "search":setSearchParam("Mentalism Malayalam")
+                                            // });
+                                          },
+                                          child: Container(
+                                            width: w * 0.5,
+                                            decoration: BoxDecoration(
+                                                boxShadow: [
+                                                  BoxShadow(
+                                                      color: Colors.grey,
+                                                      offset: Offset(1, 0),
+                                                      blurRadius: 3)
+                                                ],
+                                                color: Palette.whiteColor,
+                                                image: DecorationImage(
+                                                    image: NetworkImage(
+                                                        data[index]
+                                                            .perfcontent
+                                                            .toString()),
+                                                    fit: BoxFit.cover),
+                                                borderRadius:
+                                                    BorderRadius.circular(
+                                                        w * 0.04),
+                                                border: Border.all(
+                                                    color:
+                                                        Colors.grey.shade50)),
                                             child: Container(
-                                              width: w * 0.5,
+                                              width: w * 0.52,
+                                              height: h * 0.175,
                                               decoration: BoxDecoration(
-                                                  boxShadow: [
-                                                    BoxShadow(
-                                                        color: Colors.grey,
-                                                        offset: Offset(1, 0),
-                                                        blurRadius: 3)
-                                                  ],
-                                                  color: Palette.whiteColor,
-                                                  image: DecorationImage(
-                                                      image: NetworkImage(
-                                                          data[index]
-                                                              .perfcontent
-                                                              .toString()),
-                                                      fit: BoxFit.cover),
-                                                  borderRadius:
-                                                      BorderRadius.circular(
-                                                          w * 0.04),
-                                                  border: Border.all(
-                                                      color:
-                                                          Colors.grey.shade50)),
-                                              child: Container(
-                                                width: w * 0.52,
-                                                height: h * 0.175,
-                                                decoration: BoxDecoration(
-                                                  borderRadius:
-                                                      BorderRadius.circular(
-                                                          w * 0.04),
-                                                  color: Colors.black38,
-                                                ),
-                                                child: Icon(
-                                                  CupertinoIcons.play_circle,
-                                                  color: Colors.white,
-                                                  size: w * 0.1,
-                                                ),
+                                                borderRadius:
+                                                    BorderRadius.circular(
+                                                        w * 0.04),
+                                                color: Colors.black38,
+                                              ),
+                                              child: Icon(
+                                                CupertinoIcons.play_circle,
+                                                color: Colors.white,
+                                                size: w * 0.1,
                                               ),
                                             ),
                                           ),
-                                        );
-                                      },
-                                    ),
+                                        ),
+                                      );
+                                    },
                                   ),
                                 ),
                               );
                       },
                       error: (error, stackTrace) =>
                           ErrorText(error: error.toString()),
-                      loading: () => SizedBox(),
+                      loading: () => ShimmerWidget(),
                     );
               },
             ),
@@ -473,7 +470,8 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                                                 ),
                                                 Padding(
                                                   padding: EdgeInsets.fromLTRB(
-                                                      w * 0.01, 0, w * 0.02, 0),
+                                                      w * 0.01, 0, w * 0.02, 0,
+                                                  ),
                                                   child: Row(
                                                     crossAxisAlignment:
                                                         CrossAxisAlignment
