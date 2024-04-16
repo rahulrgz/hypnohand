@@ -203,7 +203,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                 return ref.watch(getBannerFuture).when(
                   data: (data) {
                     print(data.toString());
-                    if (data.isEmpty) {
+                    if (data.sliders.isEmpty) {
                       // Handle empty slider data
                       return const Text("No slider images available");
                     }
@@ -227,7 +227,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                         enlargeFactor: 0.0,
                         scrollDirection: Axis.horizontal,
                       ),
-                      items: data.map((data) {
+                      items: data.sliders.map((data) {
                         print(data);
                         return Builder(
                           builder: (BuildContext context) {

@@ -1,13 +1,21 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:hypnohand/model/announcementmodel.dart';
-import 'package:hypnohand/model/courseModel.dart';
-import 'package:hypnohand/model/performanceModel.dart';
+
+
 import 'package:hypnohand/feature/home/repository/homerepository.dart';
+import 'package:hypnohand/model/settingmodel.dart';
+
+import '../../../model/announcementmodel.dart';
+import '../../../model/courseModel.dart';
+import '../../../model/performanceModel.dart';
+import '../../../model/reviewmodel.dart';
 
 final homeControllerProvider=Provider((ref) => HomeController(homeRepository: ref.watch(homeRepositoryProvider), ref: ref));
-final getBannerFuture=FutureProvider((ref) => ref.watch(homeControllerProvider).getBanners());
+final getBannerFuture=StreamProvider.autoDispose((ref) => ref.watch(homeControllerProvider).getBannnerss());
 final getPerformance=FutureProvider((ref) => ref.watch(homeControllerProvider).getPerformance());
+final getReview=FutureProvider((ref) => ref.watch(homeControllerProvider).getReview());
+
+
 final getPerformQuery=FutureProvider((ref) => ref.watch(homeControllerProvider).getPerforms());
 final getCourseList=FutureProvider((ref) => ref.watch(homeControllerProvider).getCourseList());
 final getCoursebysearch=StreamProvider.family((ref,String name) => ref.watch(homeControllerProvider).getCoursebySearch(name));
@@ -20,6 +28,12 @@ class HomeController{
   Future<List<String>> getBanners(){
     return _homeRepository.getBanner();
 
+  }
+  Future<List<ReviewModel>> getReview(){
+    return _homeRepository.getReview();
+  }
+  Stream<SliderSetting> getBannnerss(){
+    return _homeRepository.getbanners();
   }
   Future<List<PerformanceModel>> getPerformance(){
     return _homeRepository.getPerformance();

@@ -68,7 +68,7 @@ class _BottomNavState extends State<BottomNav> {
               label: 'Videos',
             ),
             BottomNavigationBarItem(
-              icon: Icon(CupertinoIcons.heart),
+              icon: Icon(CupertinoIcons.news),
               label: 'Saved',
             ),
             BottomNavigationBarItem(
