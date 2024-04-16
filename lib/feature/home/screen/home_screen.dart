@@ -555,7 +555,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                       padding: EdgeInsets.fromLTRB(
                           w * 0.02, w * 0.01, w * 0.03, w * 0.02),
                       child: Container(
-                        width: w * 0.3,
+                         width: w * 0.3,
                         decoration: BoxDecoration(
                           image: DecorationImage(
                               image: AssetImage("assets/Review.png"),

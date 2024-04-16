@@ -293,10 +293,12 @@ class AuthRepository {
       required BuildContext context,
       required WidgetRef ref}) async {
     try {
-      String deviceId = ref.read(devideIdProvider) ?? 'Devide Id';
+      // String deviceId = ref.read(devideIdProvider) ?? 'Devide Id';
+
       final credential = await FirebaseAuth.instance
           .signInWithEmailAndPassword(email: email, password: password)
           .then((value) async {
+
         final user = await _firestore
             .collection(FirebaseConstants.usersCollection)
             .where('email', isEqualTo: email)
@@ -304,16 +306,14 @@ class AuthRepository {
         userModel = UserModel.fromJson(user.docs.first.data());
         print("email and pass correct");
 
-        var sessionsDoc = await _sessions.doc(userModel!.id).get();
-
+        // var sessionsDoc = await _sessions.doc(userModel!.id).get();
         ///check if a session exists for this user..
-        if (sessionsDoc.exists) {
-          print("session already exists");
-          sessionsModel = SessionsModel.fromJson(
-              sessionsDoc.data() as Map<String, dynamic>);
-
+        // if (sessionsDoc.exists) {
+          // print("session already exists");
+          // sessionsModel = SessionsModel.fromJson(
+          //     sessionsDoc.data() as Map<String, dynamic>);
           ///check if current session's device id is equal to current device id...
-          if (sessionsModel!.deviceId == deviceId) {
+          // if (sessionsModel!.deviceId == deviceId) {
             print("device id same----------------");
             Navigator.push(
               context,
@@ -321,30 +321,28 @@ class AuthRepository {
                 builder: (context) => const BottomNav(),
               ),
             );
-            prefs!.setBool('logged', true);
-            prefs!.setString('currentuserId', userModel!.id!);
-          } else {
-            print('device id not same----------');
-            showSnackbar(
-                context, 'this account is already logged in on another device');
-          }
-        } else {
-          SessionsModel data = SessionsModel(
-            deviceId: deviceId,
-            lastLoggin: DateTime.now(),
-          );
-
-          _sessions.doc(userModel!.id).set(data.toJson());
-
-          Navigator.push(
-            context,
-            CupertinoPageRoute(
-              builder: (context) => const BottomNav(),
-            ),
-          );
+          //   prefs!.setBool('logged', true);
+          //   prefs!.setString('currentuserId', userModel!.id!);
+          // // } else {
+          //   print('device id not same----------');
+          //   showSnackbar(
+          //       context, 'this account is already logged in on another device');
+          // }
+        // } else {
+        //   SessionsModel data = SessionsModel(
+        //     deviceId: deviceId,
+        //     lastLoggin: DateTime.now(),
+        //   );
+          // _sessions.doc(userModel!.id).set(data.toJson());
+          // Navigator.push(
+          //   context,
+          //   CupertinoPageRoute(
+          //     builder: (context) => const BottomNav(),
+          //   ),
+          // );
           prefs!.setBool('logged', true);
           prefs!.setString('currentuserId', currentUserId!);
-        }
+      //   }
       });
     } catch (e) {
       showSnackbar(context, e.toString());
