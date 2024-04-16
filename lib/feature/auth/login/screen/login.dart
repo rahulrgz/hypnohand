@@ -7,12 +7,9 @@ import 'package:hypnohand/feature/auth/login/controller/auth_controller.dart';
 import 'package:hypnohand/feature/auth/login/screen/emailSignIn.dart';
 import 'package:hypnohand/feature/auth/login/screen/signup_page.dart';
 import 'package:lottie/lottie.dart';
-import 'package:mobile_device_identifier/mobile_device_identifier.dart';
-
 import '../../../../core/constands/image_constants.dart';
 import '../../../../core/global_variables/global_variables.dart';
 import '../../../../core/theme/pallete.dart';
-import '../../../home/screen/bottom_nav.dart';
 
 final devideIdProvider = StateProvider<String>((ref) => 'device Id');
 
@@ -25,7 +22,7 @@ class LoginScreen extends ConsumerStatefulWidget {
 
 class _LoginScreenState extends ConsumerState<LoginScreen> {
 
-    final _mobileDeviceIdentifierPlugin = MobileDeviceIdentifier();
+    // final _mobileDeviceIdentifierPlugin = MobileDeviceIdentifier();
 
   @override
   void initState() {
@@ -36,10 +33,10 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
     Future<void> initDeviceId() async {
     String deviceId;
     try {
-      deviceId = await _mobileDeviceIdentifierPlugin.getDeviceId() ??
-          'Unknown platform version';
+      // deviceId = await _mobileDeviceIdentifierPlugin.getDeviceId() ??
+      //     'Unknown platform version';
 
-          print('$deviceId \n device idddddddddddddddd');
+          // print('$deviceId \n device idddddddddddddddd');
     } on PlatformException {
       deviceId = 'Failed to get platform version.';
       print('device id failed ');
@@ -47,7 +44,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
 
     if (!mounted) return;
     
-    ref.read(devideIdProvider.notifier).update((state) => deviceId);
+    // ref.read(devideIdProvider.notifier).update((state) => deviceId);
   }
 
   @override

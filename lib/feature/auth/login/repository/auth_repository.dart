@@ -58,7 +58,7 @@ class AuthRepository {
     required WidgetRef ref,
   }) async {
     try {
-      String deviceId = ref.read(devideIdProvider) ?? 'Devide Id';
+      // String deviceId = ref.read(devideIdProvider) ?? 'Devide Id';
 
       final GoogleSignInAccount? existingUser =
           await _googleSignIn.signInSilently();
@@ -90,12 +90,12 @@ class AuthRepository {
       if (userCredential!.additionalUserInfo!.isNewUser) {
         print("New User============================");
 
-        SessionsModel data = SessionsModel(
-          deviceId: deviceId,
-          lastLoggin: DateTime.now(),
-        );
+        // SessionsModel data = SessionsModel(
+        //   deviceId: deviceId,
+        //   lastLoggin: DateTime.now(),
+        // );
 
-        _sessions.doc(currentUserId).set(data.toJson());
+        // _sessions.doc(currentUserId).set(data.toJson());
 
         userModel = UserModel(
             name: name ?? '',
@@ -112,49 +112,50 @@ class AuthRepository {
         });
         return right(null);
       } else {
+
         print("old user");
-        var sessionsDoc = await _sessions.doc(currentUserId).get();
+        // var sessionsDoc = await _sessions.doc(currentUserId).get();
 
-        if (sessionsDoc.exists) {
-          print(sessionsDoc.reference);
-          print('reference');
+        // if (sessionsDoc.exists) {
+        //   print(sessionsDoc.reference);
+        //   print('reference');
 
-          sessionsModel = SessionsModel.fromJson(
-              sessionsDoc.data() as Map<String, dynamic>);
+        //   sessionsModel = SessionsModel.fromJson(
+        //       sessionsDoc.data() as Map<String, dynamic>);
 
           // var sessionReference =sessionsModel!.copyWith(reference: sessionsDoc.reference);
 
           // _sessions.doc(currentUserId).update(sessionReference.toJson());
 
-          print(sessionsModel);
-          print('sessions model-------------------');
+          // print(sessionsModel);
+          // print('sessions model-------------------');
 
           userModel = (await getUser());
-          if (userModel?.name != null &&
-              userModel?.phoneNumber != null &&
-              userModel?.name != '' &&
-              userModel?.phoneNumber != '') {
-            if (sessionsModel!.deviceId == deviceId) {
-              prefs!.setString('currentuserId', userModel!.id.toString());
+          // if (userModel?.name != null &&
+          //     userModel?.phoneNumber != null &&
+          //     userModel?.name != '' &&
+          //     userModel?.phoneNumber != '') {
+            // if (sessionsModel!.deviceId == deviceId) {
+            //   prefs!.setString('currentuserId', userModel!.id.toString());
 
-              return right(userModel);
-            } else {
-              return left(Failure(
-                  'this account is already logged in on another device'));
-            }
-          } else {
-            return right(null);
-          }
-        } else {
-          SessionsModel data = SessionsModel(
-            deviceId: '',
-            lastLoggin: DateTime.now(),
-          );
+            //   return right(userModel);
+            // } else {
+            //   return left(Failure(
+            //       'this account is already logged in on another device'));
+            // }
+          // } else {
+            return right(userModel);
+          // }
+        // } else {
+        //   SessionsModel data = SessionsModel(
+        //     deviceId: '',
+        //     lastLoggin: DateTime.now(),
+        //   );
 
-          ///document generated
-          ///_sessions.doc(currentUserId).set(data.toJson());
-          return right(userModel);
-        }
+        //   ///document generated
+        //   ///_sessions.doc(currentUserId).set(data.toJson());
+        //   return right(userModel);
+        // }
       }
     } on FirebaseException catch (e) {
       throw 'firebase exception';
