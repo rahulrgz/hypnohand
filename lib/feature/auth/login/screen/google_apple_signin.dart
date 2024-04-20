@@ -12,7 +12,7 @@ import 'package:hypnohand/core/utils.dart';
 import 'package:hypnohand/theme/pallete.dart';
 import 'package:intl_phone_field/intl_phone_field.dart';
 import '../controller/auth_controller.dart';
-
+///chabnge
 class GoogleApplesignin extends ConsumerStatefulWidget {
   const GoogleApplesignin({super.key});
 

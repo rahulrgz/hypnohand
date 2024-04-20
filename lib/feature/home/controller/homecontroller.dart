@@ -15,7 +15,7 @@ final getBannerFuture=StreamProvider.autoDispose((ref) => ref.watch(homeControll
 final getPerformance=FutureProvider((ref) => ref.watch(homeControllerProvider).getPerformance());
 final getReview=FutureProvider((ref) => ref.watch(homeControllerProvider).getReview());
 
-
+///chabnge
 final getPerformQuery=FutureProvider((ref) => ref.watch(homeControllerProvider).getPerforms());
 final getCourseList=FutureProvider((ref) => ref.watch(homeControllerProvider).getCourseList());
 final getCoursebysearch=StreamProvider.family((ref,String name) => ref.watch(homeControllerProvider).getCoursebySearch(name));

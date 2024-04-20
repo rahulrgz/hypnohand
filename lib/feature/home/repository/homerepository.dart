@@ -12,7 +12,7 @@ import 'package:hypnohand/model/settingmodel.dart';
 final homeRepositoryProvider=Provider((ref) => HomeRepository(firestore: ref.watch(firestoreProvider)));
 
 class HomeRepository
-{
+{///chabnge
   final FirebaseFirestore _firestore;
   HomeRepository({required FirebaseFirestore firestore}):_firestore=firestore;
   CollectionReference get _settings=>_firestore.collection("settings");

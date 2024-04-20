@@ -16,7 +16,7 @@ class OnboardingScreen extends ConsumerStatefulWidget {
   @override
   ConsumerState<OnboardingScreen> createState() => _OnboardingScreenState();
 }
-
+///chabnge
 class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
   final controller = PageController();
   bool isLastPage = false;

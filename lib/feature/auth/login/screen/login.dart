@@ -12,7 +12,7 @@ import '../../../../core/global_variables/global_variables.dart';
 import '../../../../core/theme/pallete.dart';
 
 final devideIdProvider = StateProvider<String>((ref) => 'device Id');
-
+///chabnge
 class LoginScreen extends ConsumerStatefulWidget {
   const LoginScreen({super.key});
 

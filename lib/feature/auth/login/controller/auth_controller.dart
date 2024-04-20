@@ -39,7 +39,7 @@ class AuthController extends StateNotifier<bool> {
         super(false);
 
   Stream<User?> get authStateChange => _authRepository.authStateChange;
-
+///chabnge
   void signInWithGoogle({
     required WidgetRef ref,
     String? name,

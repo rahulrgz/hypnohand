@@ -26,7 +26,7 @@ class _SplashScreenState extends ConsumerState<SplashScreen> {
     checkLogin() async {
 
       if(prefs!.getBool('onBoarding')==true){
-
+        ///chabnge
      isLogged = prefs!.getBool('logged');
     currentUserId = prefs!.getString('currentuserId');
 

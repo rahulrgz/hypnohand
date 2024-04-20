@@ -16,7 +16,7 @@ import 'package:hypnohand/feature/home/screen/bottom_nav.dart';
 import 'package:hypnohand/main.dart';
 import 'package:hypnohand/model/sessionsModel.dart';
 import 'package:hypnohand/model/usermodel.dart';
-
+///chabnge
 final userProvider = StateProvider<UserModel?>((ref) => null);
 
 final authRepositoryProvider = Provider((ref) => AuthRepository(
