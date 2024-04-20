@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:hypnohand/core/common/loader.dart';
 import 'package:hypnohand/core/common/shimmer.dart';
 import 'package:hypnohand/core/constands/image_constants.dart';
 import 'package:hypnohand/model/courseModel.dart';
@@ -541,33 +542,44 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                 ],
               ),
             ),
-            Padding(
-              padding: EdgeInsets.only(left: w * 0.02),
-              child: SizedBox(
-                height: h * 0.25,
-                child: ListView.builder(
-                  shrinkWrap: true,
-                  physics: BouncingScrollPhysics(),
-                  scrollDirection: Axis.horizontal,
-                  itemCount: 4,
-                  itemBuilder: (context, index) {
-                    return Padding(
-                      padding: EdgeInsets.fromLTRB(
-                          w * 0.02, w * 0.01, w * 0.03, w * 0.02),
-                      child: Container(
-                         width: w * 0.3,
-                        decoration: BoxDecoration(
-                          image: DecorationImage(
-                              image: AssetImage("assets/Review.png"),
-                              fit: BoxFit.cover),
-                          borderRadius: BorderRadius.circular(w * 0.04),
-                        ),
-                      ),
-                    );
-                  },
-                ),
-              ),
-            ),
+            Consumer(builder: (context, ref, child) {
+                return ref.watch(getReview).when(data: (data) {
+                return  Padding(
+                  padding: EdgeInsets.only(left: w * 0.02),
+                  child: SizedBox(
+                    height: h * 0.25,
+                    child: ListView.builder(
+                      shrinkWrap: true,
+                      physics: BouncingScrollPhysics(),
+                      scrollDirection: Axis.horizontal,
+                      itemCount: data.length,
+                      itemBuilder: (context, index) {
+                        return Padding(
+                          padding: EdgeInsets.fromLTRB(
+                              w * 0.02, w * 0.01, w * 0.03, w * 0.02),
+                          child: GestureDetector(
+                            onTap: () {
+                              launchYouTubeVideo(data[index].reviewlink!);
+                            },
+                            child: Container(
+                              width: w * 0.3,
+                              decoration: BoxDecoration(
+                                image: DecorationImage(
+                                    image: NetworkImage(data[index].thumbnail!),
+                                    fit: BoxFit.cover),
+                                borderRadius: BorderRadius.circular(w * 0.04),
+                              ),
+                            ),
+                          ),
+                        );
+                      },
+                    ),
+                  ),
+                );
+              }, error:  (error, stackTrace) => ErrorText(error: error.toString()), loading:() => Loader(),);
+              
+            },),
+
           ],
         ),
       ),

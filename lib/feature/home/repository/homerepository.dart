@@ -42,7 +42,7 @@ return _firestore.collection("slidersetting").doc("sliderss").snapshots().map((e
     
     
   }
-  Future<List<ReviewModel>> getReview()async{
+  Future<List<ReviewModel>>  getReview()async{
     var query=await _review.where("status",isEqualTo: true).get();
 
     final a= query.docs.map((e) => ReviewModel.fromMap(e.data()as Map<String,dynamic>)).toList();

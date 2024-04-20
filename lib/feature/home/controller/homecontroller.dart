@@ -13,7 +13,7 @@ import '../../../model/reviewmodel.dart';
 final homeControllerProvider=Provider((ref) => HomeController(homeRepository: ref.watch(homeRepositoryProvider), ref: ref));
 final getBannerFuture=StreamProvider.autoDispose((ref) => ref.watch(homeControllerProvider).getBannnerss());
 final getPerformance=FutureProvider((ref) => ref.watch(homeControllerProvider).getPerformance());
-final getReview=FutureProvider((ref) => ref.watch(homeControllerProvider).getReview());
+final  getReview=FutureProvider((ref) => ref.watch(homeControllerProvider).getReview());
 
 ///chabnge
 final getPerformQuery=FutureProvider((ref) => ref.watch(homeControllerProvider).getPerforms());
