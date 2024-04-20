@@ -1,3 +1,4 @@
+import 'package:flml_internet_checker/flml_internet_checker.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
@@ -5,19 +6,77 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hypnohand/core/common/error_text.dart';
 import 'package:hypnohand/core/common/loader.dart';
 import 'package:hypnohand/feature/home/controller/homecontroller.dart';
+import 'package:internet_connection_checker_plus/internet_connection_checker_plus.dart';
+import 'package:rounded_loading_button_plus/rounded_loading_button.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../core/global_variables/global_variables.dart';
 import '../../core/theme/pallete.dart';
 
-class Performence extends StatefulWidget {
+class Performence extends ConsumerStatefulWidget {
   const Performence({super.key});
 
   @override
-  State<Performence> createState() => _PerformenceState();
+  ConsumerState<Performence> createState() => _PerformenceState();
 }
 
-class _PerformenceState extends State<Performence> {
+class _PerformenceState extends ConsumerState<Performence> {
+  final RoundedLoadingButtonController _buttonController = RoundedLoadingButtonController();
+  bool _isDeviceConnected = false;
+  var connectionStatus;
+  final internetConnectionStatusProvider =
+  StateProvider<InternetStatus>(
+          (ref) => InternetStatus.connected);
+
+  final internetcheckProvider = StateProvider((ref) => false);
+
+  checkConnection() async {
+
+    _isDeviceConnected = await InternetConnection().hasInternetAccess;
+    if(_isDeviceConnected){
+      connectionStatus =  InternetStatus.connected;
+    }else{
+
+
+      connectionStatus =  InternetStatus.disconnected;
+
+
+    }
+
+    ref.watch(internetConnectionStatusProvider.notifier).state =
+        connectionStatus;
+    ref.watch(internetcheckProvider.notifier).state = _isDeviceConnected;
+    if (_isDeviceConnected) {
+      _buttonController.success();
+    } else {
+      _buttonController.stop();
+
+      const snackBar=SnackBar(content: Text("No active connection found"));
+
+      ScaffoldMessenger.of(context).showSnackBar(snackBar);
+
+
+    }
+    InternetConnection().onStatusChange.listen((result) async {
+      _buttonController.stop();
+      if (result != InternetStatus.disconnected) {
+        _isDeviceConnected = await InternetConnection().hasInternetAccess;
+
+        connectionStatus =  InternetStatus.connected;
+
+        ref.read(internetConnectionStatusProvider.notifier).state =
+            connectionStatus;
+        ref.read(internetcheckProvider.notifier).state = _isDeviceConnected;
+      }
+      else {
+        _buttonController.reset();
+        ref.read(internetConnectionStatusProvider.notifier).state =
+            InternetStatus.disconnected;
+        ref.read(internetcheckProvider.notifier).state = false;
+      }
+    });
+  }
+
   void launchYouTubeVideo(String uri ) async {
     final url = Uri.parse(uri.toString());
 
@@ -34,10 +93,17 @@ class _PerformenceState extends State<Performence> {
     }
   }
   @override
+  void initState() {
+    // TODO: implement initState
+    print('performnace--------');
+    checkConnection();
+    super.initState();
+  }
+  @override
   Widget build(BuildContext context) {
     h = MediaQuery.of(context).size.height;
     w = MediaQuery.of(context).size.width;
-    return Scaffold(
+    return ref.watch(internetConnectionStatusProvider)==InternetStatus.disconnected?Center(child: Text("no internet"),): Scaffold(
       backgroundColor: Color(0xFFEFECE8),
       body: Column(
         children: [

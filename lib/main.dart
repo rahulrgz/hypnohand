@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:flml_internet_checker/flml_internet_checker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hypnohand/core/global_variables/global_variables.dart';
@@ -25,7 +26,10 @@ class MyApp extends StatelessWidget {
     h = MediaQuery.of(context).size.height;
     w = MediaQuery.of(context).size.width;
     return const MaterialApp(
-      home: SafeArea(child: SplashScreen()),
+      home: SafeArea(child: InternetChecker(
+          placeHolder: CircularProgressIndicator(),
+          internetConnectionText:'Not Internet Connection',
+          child: SplashScreen())),
       debugShowCheckedModeBanner: false,
     );
   }

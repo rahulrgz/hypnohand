@@ -170,11 +170,17 @@ class AuthRepository {
   }
 
   Future<UserModel?> getUser() async {
+   String? userId=prefs!.getString('currentuserId');
+   print("${userId} user id=================");
     DocumentSnapshot<Map<String, dynamic>> snapshot = await FirebaseFirestore
         .instance
         .collection(FirebaseConstants.usersCollection)
-        .doc(currentUserId)
+        .doc(userId)
         .get();
+   // DocumentSnapshot<Map<String, dynamic>> snapshot = await FirebaseFirestore
+   //     .instance
+   //     .collection(FirebaseConstants.usersCollection).where(field)
+   //     .get();
     print(snapshot.exists);
     if (snapshot.exists) {
       final data = UserModel.fromJson(snapshot.data()!);

@@ -1,3 +1,4 @@
+import 'package:flml_internet_checker/flml_internet_checker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hypnohand/core/theme/pallete.dart';
@@ -5,6 +6,8 @@ import 'package:hypnohand/core/utils.dart';
 import 'package:hypnohand/feature/auth/login/controller/auth_controller.dart';
 import 'package:hypnohand/feature/auth/login/repository/auth_repository.dart';
 import 'package:hypnohand/model/usermodel.dart';
+import 'package:internet_connection_checker_plus/internet_connection_checker_plus.dart';
+import 'package:rounded_loading_button_plus/rounded_loading_button.dart';
 import '../../../core/global_variables/global_variables.dart';
 
 class ProfileScreen extends ConsumerStatefulWidget {
@@ -15,6 +18,71 @@ class ProfileScreen extends ConsumerStatefulWidget {
 }
 
 class _ProfileScreenState extends ConsumerState<ProfileScreen> {
+
+  final RoundedLoadingButtonController _buttonController = RoundedLoadingButtonController();
+  bool _isDeviceConnected = false;
+  var connectionStatus;
+  final internetConnectionStatusProvider =
+  StateProvider<InternetStatus>(
+          (ref) => InternetStatus.connected);
+
+  final internetcheckProvider = StateProvider((ref) => false);
+
+  checkConnection() async {
+
+    _isDeviceConnected = await InternetConnection().hasInternetAccess;
+    if(_isDeviceConnected){
+      connectionStatus =  InternetStatus.connected;
+    }else{
+
+
+      connectionStatus =  InternetStatus.disconnected;
+
+
+    }
+
+    ref.watch(internetConnectionStatusProvider.notifier).state =
+        connectionStatus;
+    ref.watch(internetcheckProvider.notifier).state = _isDeviceConnected;
+    if (_isDeviceConnected) {
+      _buttonController.success();
+    } else {
+      _buttonController.stop();
+
+      const snackBar=SnackBar(content: Text("No active connection found"));
+
+      ScaffoldMessenger.of(context).showSnackBar(snackBar);
+
+
+    }
+    InternetConnection().onStatusChange.listen((result) async {
+      _buttonController.stop();
+      if (result != InternetStatus.disconnected) {
+        _isDeviceConnected = await InternetConnection().hasInternetAccess;
+
+        connectionStatus =  InternetStatus.connected;
+
+        ref.read(internetConnectionStatusProvider.notifier).state =
+            connectionStatus;
+        ref.read(internetcheckProvider.notifier).state = _isDeviceConnected;
+      }
+      else {
+        _buttonController.reset();
+        ref.read(internetConnectionStatusProvider.notifier).state =
+            InternetStatus.disconnected;
+        ref.read(internetcheckProvider.notifier).state = false;
+      }
+    });
+  }
+
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    print('profile screen');
+    checkConnection();
+    super.initState();
+  }
   @override
   Widget build(BuildContext context) {
     h = MediaQuery.of(context).size.height;
@@ -22,7 +90,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
     return SafeArea(
       child: Scaffold(
         backgroundColor: Palette.bgColor,
-        body: Padding(
+        body:ref.watch(internetConnectionStatusProvider)==InternetStatus.disconnected?Center(child: Text("no internet"),): Padding(
           padding: EdgeInsets.fromLTRB(w * 0.05, 0, w * 0.05, 0),
           child: SingleChildScrollView(
             child: Column(
@@ -205,7 +273,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                     ),
                   ],
                 ),
-                SizedBox(height: h * 0.20///chabnge),
+                SizedBox(height: h * 0.20),
                 Center(
                   child: Text(
                     "Version 0.1.10",
