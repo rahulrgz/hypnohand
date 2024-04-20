@@ -159,7 +159,7 @@ class _SavedCourseState extends State<SavedCourse> {
                                           ),
                                         ),
                                         // Icon(
-                                        //   CupertinoIcons.bookmark_fill,
+                                        //   Cuper tinoIcons.bookmark_fill,
                                         //   size: h * 0.025,
                                         // )
                                       ],

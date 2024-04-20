@@ -179,13 +179,15 @@ class AuthRepository {
     if (snapshot.exists) {
       final data = UserModel.fromJson(snapshot.data()!);
       userModel = data;
+      print("getUserSuccess");
+      print(userModel?.name??'userModel.name is null');
       return data;
     }
     return null;
   }
 
   void logOut({required BuildContext context}) async {
-    await _firestore.collection('sessions').doc(userModel!.id).delete();
+    // await _firestore.collection('sessions').doc(userModel!.id).delete();
     await _googleSignIn.signOut();
     await _firebaseAuth.signOut();
     Navigator.of(context).pushAndRemoveUntil(

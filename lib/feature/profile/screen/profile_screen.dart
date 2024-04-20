@@ -58,32 +58,32 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                             fontWeight: FontWeight.w400),
                       ),
                       SizedBox(height: h * 0.02),
-                      Container(
-                        height: h * 0.04,
-                        width: w * 0.34,
-                        decoration: BoxDecoration(
-                          color: Palette.secondaryColor,
-                          borderRadius: BorderRadius.circular(w * 0.02),
-                        ),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Icon(
-                              Icons.edit,
-                              color: Colors.white,
-                              size: h * 0.02,
-                            ),
-                            Text(
-                              " Edit Profile",
-                              textAlign: TextAlign.center,
-                              style: TextStyle(
-                                  color: Palette.whiteColor,
-                                  fontSize: h * 0.02,
-                                  fontWeight: FontWeight.w500),
-                            ),
-                          ],
-                        ),
-                      ),
+                      // Container(
+                      //   height: h * 0.04,
+                      //   width: w * 0.34,
+                      //   decoration: BoxDecoration(
+                      //     color: Palette.secondaryColor,
+                      //     borderRadius: BorderRadius.circular(w * 0.02),
+                      //   ),
+                      //   child: Row(
+                      //     mainAxisAlignment: MainAxisAlignment.center,
+                      //     children: [
+                      //       Icon(
+                      //         Icons.edit,
+                      //         color: Colors.white,
+                      //         size: h * 0.02,
+                      //       ),
+                      //       Text(
+                      //         " Edit Profile",
+                      //         textAlign: TextAlign.center,
+                      //         style: TextStyle(
+                      //             color: Palette.whiteColor,
+                      //             fontSize: h * 0.02,
+                      //             fontWeight: FontWeight.w500),
+                      //       ),
+                      //     ],
+                      //   ),
+                      // ),
                       SizedBox(height: h * 0.02),
                     ],
                   ),
@@ -205,7 +205,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                     ),
                   ],
                 ),
-                SizedBox(height: h * 0.04),
+                SizedBox(height: h * 0.20),
                 Center(
                   child: Text(
                     "Version 0.1.10",
