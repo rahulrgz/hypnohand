@@ -51,10 +51,11 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
   Widget build(BuildContext context) {
     h = MediaQuery.of(context).size.height;
     w = MediaQuery.of(context).size.width;
+    final isLoading = ref.watch(authControllerProvider);
     return SafeArea(
       child: Scaffold(
         backgroundColor: Palette.bgColor,
-        body: SingleChildScrollView(
+        body:isLoading==true?Center(child: CircularProgressIndicator()): SingleChildScrollView(
           child: Padding(
             padding: EdgeInsets.only(left: w * 0.05, right: w * 0.05),
             child: Column(
@@ -105,30 +106,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                   ),
                 ),
                 SizedBox(height: h * 0.015),
-                Container(
-                  height: h * 0.065,
-                  width: w * 0.9,
-                  decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(w * 0.03),
-                      color: Palette.whiteColor,
-                      border: Border.all(color: Palette.secondaryColor)),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      SvgPicture.asset(
-                        Constants.apple,
-                        height: h * 0.027,
-                        color: Colors.black,
-                      ),
-                      SizedBox(width: w * 0.03),
-                      Text("Continue with Apple",
-                          style: TextStyle(
-                              fontWeight: FontWeight.w500,
-                              fontSize: h * 0.015,
-                              color: Palette.blackColor)),
-                    ],
-                  ),
-                ),
+
                 SizedBox(height: h * 0.02),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,

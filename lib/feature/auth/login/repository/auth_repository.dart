@@ -112,7 +112,7 @@ class AuthRepository {
         });
         return right(null);
       } else {
-
+prefs!.setString('currentuserId', currentUserId??'no current user Id');
         print("old user");
         // var sessionsDoc = await _sessions.doc(currentUserId).get();
 

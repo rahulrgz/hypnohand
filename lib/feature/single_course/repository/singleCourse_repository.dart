@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hypnohand/model/razorpay_Response.dart';
+import 'package:hypnohand/model/usermodel.dart';
 import '../../../core/constants/firebase_constants.dart';
 import '../../../core/constants/providers/firebase_providers.dart';
 
@@ -19,7 +20,8 @@ CollectionReference get _razorpaySuccess =>
 
 onPaymentSuccess({required String price,required double discount,required String courseName,required String subName,required Map<dynamic,dynamic>response}){
   RazorPayResponseModel data= RazorPayResponseModel(
-      price: price, discount: discount, courseName: courseName, subName: subName, response: response,purchaseDate: DateTime.now()
+      price: price, discount: discount, courseName: courseName, subName: subName, response: response,purchaseDate: DateTime.now(), userId: userModel?.id??'userId'
+
   );
   _razorpaySuccess.add(data.toMap());
 }

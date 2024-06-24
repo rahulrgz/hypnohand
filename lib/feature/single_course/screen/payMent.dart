@@ -3,7 +3,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:fpdart/fpdart.dart';
 import 'package:hypnohand/core/utils.dart';
 import 'package:hypnohand/model/courseModel.dart';
 import 'package:hypnohand/model/usermodel.dart';
@@ -49,15 +48,18 @@ class _PaymentScreenState extends ConsumerState<PaymentScreen> {
       required double discount,
       required String courseName,
       required String subName,
-      required Map<dynamic, dynamic> response}) {
+      required PaymentSuccessResponse response}) {
     print(price);
     print('ente price------------');
     RazorPayResponseModel data = RazorPayResponseModel(
+      userId: userModel?.id??'',
         price: price,
         discount: discount,
         courseName: courseName,
         subName: subName,
-        response: response,
+        response: {
+        'order Id':response.orderId
+        },
         purchaseDate: DateTime.now());
     _razorpaySuccess.add(data.toMap());
 
@@ -66,6 +68,7 @@ class _PaymentScreenState extends ConsumerState<PaymentScreen> {
     print(_newStudentList);
     print('new list----------');
 
+    ///adding user id to firebase List.
     CourseModel _courseUpdateData =
         coursemodell!.copyWith(listofstudents: _newStudentList);
 
@@ -77,7 +80,7 @@ class _PaymentScreenState extends ConsumerState<PaymentScreen> {
     });
   }
 
-  // create order
+  /// create order
   void createOrder() async {
     String username =
         razorCredentials.keyId; //key id you get from razorpay from settings
@@ -112,7 +115,7 @@ class _PaymentScreenState extends ConsumerState<PaymentScreen> {
 
   openGateway(String orderId) {
     print(coursePrice);
-    print("funda price===========");
+    print(" price===========");
     var options = {
       'key': razorCredentials.keyId,
 
@@ -125,7 +128,7 @@ class _PaymentScreenState extends ConsumerState<PaymentScreen> {
 
       /// Generate order_id using Orders API
 
-      'description': 'Course 1  ',
+      'description':   widget.data.coursename,
       'timeout': 60 * 5,
 
       /// in seconds // 5 minutes
@@ -145,21 +148,23 @@ class _PaymentScreenState extends ConsumerState<PaymentScreen> {
   }
 
   void handlePaymentSucces(PaymentSuccessResponse response) {
+    print('hi');
+    print('success response ${response.signature} ---------->>>>>>>>>>>>');
     ref
         .read(paymentStatusProvider.notifier)
         .update((state) => 'Payment Successfull');
     onPaymentSuccess(
         price: coursePrice??'' ,
         discount: 0,
-        courseName: 'course 1',
-        subName: 'course 1',
-        response: {});
-    print(response.signature);
+        courseName: widget.data.coursename,
+        subName: widget.data.coursename,
+        response: response);
+    print("signature ---------- ${response.signature}");
     print(response.paymentId);
     print(response.orderId);
     // print(response.data);
 
-    print("success response-------------");
+    print("success response on payment success-------------");
 
     ///on success we will verify signature to check authenticity
 

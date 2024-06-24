@@ -66,6 +66,7 @@ class _CourseSingleViewState extends ConsumerState<CourseSingleView> {
     print(price);
     print('ente price------------');
     RazorPayResponseModel data = RazorPayResponseModel(
+      userId: userModel?.id??'',
         price: price,
         discount: discount,
         courseName: courseName,
@@ -158,6 +159,7 @@ class _CourseSingleViewState extends ConsumerState<CourseSingleView> {
   }
 
   void handlePaymentSucces(PaymentSuccessResponse response) {
+    print('success respose order id ======>>>>>>>${response.orderId}');
     ref
         .read(paymentStatusProvider.notifier)
         .update((state) => 'Payment Successfull');
@@ -166,13 +168,13 @@ class _CourseSingleViewState extends ConsumerState<CourseSingleView> {
         discount: 0,
         courseName: 'course 1',
         subName: 'course 1',
-        response: {});
+        response: {'order id':response.orderId,'signature':response.signature,'payment id':response.paymentId});
     print(response.signature);
     print(response.paymentId);
-    print(response.orderId);
+    print('order id -----.>${response.orderId}');
     // print(response.data);
 
-    print("success response-------------");
+    print("success response------------->>>");
 
     ///on success we will verify signature to check authenticity
 
@@ -370,6 +372,9 @@ class _CourseSingleViewState extends ConsumerState<CourseSingleView> {
   Widget build(BuildContext context) {
     h = MediaQuery.of(context).size.height;
     w = MediaQuery.of(context).size.width;
+
+
+
     return SafeArea(
       child: Scaffold(
         backgroundColor: Color(0xFFF8F6F4),
@@ -512,7 +517,11 @@ class _CourseSingleViewState extends ConsumerState<CourseSingleView> {
                                     width: w,
                                     child: ElevatedButton(
                                       onPressed: () {
+                                        _FlexiController!.dispose();
+                                        _videoPlayerController1.dispose();
                                         createOrder();
+
+
                                       },
                                       style: ElevatedButton.styleFrom(
                                         backgroundColor: Palette.primaryColor,

@@ -126,84 +126,14 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                             fontWeight: FontWeight.w400),
                       ),
                       SizedBox(height: h * 0.02),
-                      // Container(
-                      //   height: h * 0.04,
-                      //   width: w * 0.34,
-                      //   decoration: BoxDecoration(
-                      //     color: Palette.secondaryColor,
-                      //     borderRadius: BorderRadius.circular(w * 0.02),
-                      //   ),
-                      //   child: Row(
-                      //     mainAxisAlignment: MainAxisAlignment.center,
-                      //     children: [
-                      //       Icon(
-                      //         Icons.edit,
-                      //         color: Colors.white,
-                      //         size: h * 0.02,
-                      //       ),
-                      //       Text(
-                      //         " Edit Profile",
-                      //         textAlign: TextAlign.center,
-                      //         style: TextStyle(
-                      //             color: Palette.whiteColor,
-                      //             fontSize: h * 0.02,
-                      //             fontWeight: FontWeight.w500),
-                      //       ),
-                      //     ],
-                      //   ),
-                      // ),
                       SizedBox(height: h * 0.02),
                     ],
                   ),
                 ),
                 SizedBox(height: h * 0.03),
-                // Text(
-                //   "Purchased Courses",
-                //   style: TextStyle(
-                //       color: Palette.blackColor,
-                //       fontSize: w * 0.04,
-                //       fontWeight: FontWeight.w600),
-                // ),
+
                 SizedBox(height: h * 0.015),
-                // Row(
-                //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                //   children: [
-                //     Text(
-                //       "Level 0",
-                //       style: TextStyle(
-                //           color: Palette.blackColor,
-                //           fontSize: w * 0.036,
-                //           fontWeight: FontWeight.w400),
-                //     ),
-                //     Text(
-                //       "Sep 2024",
-                //       style: TextStyle(
-                //           color: Palette.blackColor,
-                //           fontSize: w * 0.036,
-                //           fontWeight: FontWeight.w400),
-                //     ),
-                //   ],
-                // ),
-                // Divider(thickness: w * 0.0004),
-                // Row(
-                //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                //   children: [
-                //     Text(
-                //       "Level 1",
-                //       style: TextStyle(
-                //           color: Palette.blackColor,
-                //           fontSize: w * 0.036,
-                //           fontWeight: FontWeight.w400),
-                //     ),
-                //     Text(
-                //       "Sep 2024",
-                //       style: TextStyle(
-                //           color: Palette.blackColor,
-                //           fontSize: w * 0.036,
-                //           fontWeight: FontWeight.w400),
-                //     ),
-                //   ],
-                // ),
+
                 Divider(thickness: w * 0.0004),
                 SizedBox(height: h * 0.02),
                 Text(
@@ -257,15 +187,15 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text(
+                 userModel?.phoneNumber!=''?   Text(
                       "Phone Number",
                       style: TextStyle(
                           color: Palette.blackColor,
                           fontSize: w * 0.036,
                           fontWeight: FontWeight.w400),
-                    ),
+                    ):SizedBox(),
                     Text(
-                      "9744930917",
+                      userModel?.phoneNumber??'no name',
                       style: TextStyle(
                           color: Palette.blackColor,
                           fontSize: w * 0.036,
@@ -300,6 +230,8 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                     ),
                   ),
                 ),
+
+
               ],
             ),
           ),
