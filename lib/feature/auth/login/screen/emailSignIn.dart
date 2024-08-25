@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hypnohand/feature/auth/login/controller/auth_controller.dart';
+import 'package:hypnohand/feature/connectivity/connectivity.dart';
 import 'package:hypnohand/theme/pallete.dart';
 import 'package:lottie/lottie.dart';
 import '../../../../core/constands/image_constants.dart';
@@ -48,7 +49,7 @@ class _EmailSignInState extends ConsumerState<EmailSignIn> {
       appBar: AppBar(
         elevation: 0,
       ),
-      body: Form(
+      body: ref.watch(connectivityProvider)==ConnectivityStatus.disconnected?Center(child: Text("No internet Connection"),):Form(
         key: formkey,
         child: SingleChildScrollView(
           physics: const BouncingScrollPhysics(),
@@ -203,20 +204,20 @@ class _EmailSignInState extends ConsumerState<EmailSignIn> {
                         ),
                         contentPadding:
                             EdgeInsets.only(bottom: w * 0.015, left: w * 0.03),
-                        suffixIcon: GestureDetector(
-                          onTap: () {
-                            // print("mask---$mask");
-                            // ref.read( showPasswordProvider.notifier).update((state) => !mask);
-                            // print(mask);
-                          },
-                          child: Padding(
-                            padding: EdgeInsets.all(w * 0.032),
-                            child: SvgPicture.asset(
-                              Constants.maskPassword,
-                              height: h * 0.02,
-                            ),
-                          ),
-                        ),
+                        // suffixIcon: GestureDetector(
+                        //   onTap: () {
+                        //     // print("mask---$mask");
+                        //     // ref.read( showPasswordProvider.notifier).update((state) => !mask);
+                        //     // print(mask);
+                        //   },
+                        //   child: Padding(
+                        //     padding: EdgeInsets.all(w * 0.032),
+                        //     child: SvgPicture.asset(
+                        //       Constants.maskPassword,
+                        //       height: h * 0.02,
+                        //     ),
+                        //   ),
+                        // ),
                         prefixStyle: TextStyle(
                             backgroundColor: Colors.red,
                             decoration: TextDecoration.lineThrough),
@@ -257,20 +258,20 @@ class _EmailSignInState extends ConsumerState<EmailSignIn> {
                 },
               ),
               SizedBox(height: h * 0.01),
-              Align(
-                alignment: Alignment.centerRight,
-                child: Padding(
-                  padding: EdgeInsets.only(right: w * 0.05),
-                  child: Text(
-                    "Forgot Password?",
-                    style: GoogleFonts.roboto(
-                        letterSpacing: 0,
-                        color: Colors.black,
-                        fontWeight: FontWeight.w400,
-                        fontSize: w * 0.03),
-                  ),
-                ),
-              ),
+              // Align(
+              //   alignment: Alignment.centerRight,
+              //   child: Padding(
+              //     padding: EdgeInsets.only(right: w * 0.05),
+              //     child: Text(
+              //       "Forgot Password?",
+              //       style: GoogleFonts.roboto(
+              //           letterSpacing: 0,
+              //           color: Colors.black,
+              //           fontWeight: FontWeight.w400,
+              //           fontSize: w * 0.03),
+              //     ),
+              //   ),
+              // ),
               SizedBox(
                 height: h * 0.3,
               ),

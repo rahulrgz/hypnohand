@@ -33,6 +33,9 @@ class _PaymentScreenState extends ConsumerState<PaymentScreen> {
 
   TextEditingController amtController = TextEditingController();
   String? coursePrice;
+  String? username;
+  String? coursename;
+  String? docidcourse;
 
   @override
   void initState() {
@@ -41,6 +44,9 @@ class _PaymentScreenState extends ConsumerState<PaymentScreen> {
     _razorpay.on(Razorpay.EVENT_PAYMENT_ERROR, handlePaymentError);
     _razorpay.on(Razorpay.EVENT_EXTERNAL_WALLET, handleExternalWallet);
     coursePrice =widget.data.ogprice+'00';
+    username=userModel!.name;
+    coursename=widget.data.coursename;
+    docidcourse=widget.data.docid;
     super.initState();
   }
 
@@ -48,11 +54,13 @@ class _PaymentScreenState extends ConsumerState<PaymentScreen> {
       {required String price,
       required double discount,
       required String courseName,
+        required String docidcourse,
       required String subName,
       required Map<dynamic, dynamic> response}) {
     print(price);
     print('ente price------------');
     RazorPayResponseModel data = RazorPayResponseModel(
+      docidcourse: docidcourse,
         price: price,
         discount: discount,
         courseName: courseName,
@@ -151,9 +159,9 @@ class _PaymentScreenState extends ConsumerState<PaymentScreen> {
     onPaymentSuccess(
         price: coursePrice??'' ,
         discount: 0,
-        courseName: 'course 1',
-        subName: 'course 1',
-        response: {});
+        courseName: coursename??"null",
+        subName:username??"null",
+        response: {}, docidcourse: docidcourse ?? "null");
     print(response.signature);
     print(response.paymentId);
     print(response.orderId);

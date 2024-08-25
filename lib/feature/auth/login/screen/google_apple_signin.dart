@@ -9,6 +9,7 @@ import 'package:http/http.dart' as http;
 import 'package:hypnohand/core/constands/image_constants.dart';
 import 'package:hypnohand/core/global_variables/global_variables.dart';
 import 'package:hypnohand/core/utils.dart';
+import 'package:hypnohand/feature/connectivity/connectivity.dart';
 import 'package:hypnohand/theme/pallete.dart';
 import 'package:intl_phone_field/intl_phone_field.dart';
 import '../controller/auth_controller.dart';
@@ -63,7 +64,7 @@ class _GoogleApplesigninState extends ConsumerState<GoogleApplesignin> {
               color: Colors.black),
         ),
       ),
-      body: SingleChildScrollView(
+      body:ref.watch(connectivityProvider)==ConnectivityStatus.disconnected?Center(child: Text("No Internet Connection"),):SingleChildScrollView(
         physics: const BouncingScrollPhysics(),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,

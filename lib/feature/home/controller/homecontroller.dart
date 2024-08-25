@@ -17,7 +17,7 @@ final  getReview=FutureProvider((ref) => ref.watch(homeControllerProvider).getRe
 
 ///chabnge
 final getPerformQuery=FutureProvider((ref) => ref.watch(homeControllerProvider).getPerforms());
-final getCourseList=FutureProvider((ref) => ref.watch(homeControllerProvider).getCourseList());
+final getCourseList=StreamProvider((ref) => ref.watch(homeControllerProvider).getCourseList());
 final getCoursebysearch=StreamProvider.family((ref,String name) => ref.watch(homeControllerProvider).getCoursebySearch(name));
 final getannounce=FutureProvider((ref) => ref.watch(homeControllerProvider).getannounce());
 class HomeController{
@@ -41,8 +41,8 @@ class HomeController{
   Future<QuerySnapshot> getPerforms(){
     return _homeRepository.getPerfromQuery();
   }
-  Future<List<CourseModel>>getCourseList(){
-    return _homeRepository.getCourseList();
+  Stream<List<CourseModel>>getCourseList(){
+    return _homeRepository.getcoursesbystream();
   }
   Stream<List<CourseModel>>getCoursebySearch(String name){
     return _homeRepository.getcoursebysearch(name);

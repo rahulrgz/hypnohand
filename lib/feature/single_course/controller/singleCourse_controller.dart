@@ -18,8 +18,8 @@ class SingleCourseController {
       : _singleCourseRepository = singleCourseRepository,
         _ref = ref;
 
-  onPaymentSuccess({required String price,required double discount,required String courseName,required String subName,required Map<dynamic,dynamic>response,required WidgetRef ref}){
-    _singleCourseRepository.onPaymentSuccess(price: price, discount: discount, courseName: courseName, subName: subName, response: response);
-  }
+  // onPaymentSuccess({required String price,required double discount,required String courseName,required String subName,required Map<dynamic,dynamic>response,required WidgetRef ref}){
+  //   _singleCourseRepository.onPaymentSuccess(price: price, discount: discount, courseName: courseName, subName: subName, response: response);
+  // }
 
 }

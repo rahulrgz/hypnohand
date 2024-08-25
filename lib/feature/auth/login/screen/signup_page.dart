@@ -14,6 +14,7 @@ import '../../../../core/constands/image_constants.dart';
 import '../../../../core/global_variables/global_variables.dart';
 import '../../../../core/utils.dart';
 import '../../../../theme/pallete.dart';
+import '../../../connectivity/connectivity.dart';
 import '../controller/auth_controller.dart';
 
 class SignUp_page extends ConsumerStatefulWidget {
@@ -79,7 +80,8 @@ class _SignUp_pageState extends ConsumerState<SignUp_page> {
               color: Colors.black),
         ),
       ),
-      body: SingleChildScrollView(
+      body:       ref.watch(connectivityProvider)==ConnectivityStatus.disconnected?Center(child: Text("No internet Connection"),) :
+      SingleChildScrollView(
         physics: const BouncingScrollPhysics(),
         child: Column(
           children: [

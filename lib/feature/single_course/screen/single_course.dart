@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flexivideoplayer/flexivideoplayer.dart';
 import 'package:flutter/cupertino.dart';
@@ -8,6 +9,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:hypnohand/core/constands/image_constants.dart';
 import 'package:hypnohand/core/constants/firebase_constants.dart';
 import 'package:hypnohand/model/courseModel.dart';
 import 'package:hypnohand/core/theme/pallete.dart';
@@ -21,6 +23,7 @@ import 'package:video_player/video_player.dart';
 import '../../../../core/global_variables/global_variables.dart';
 import 'razor_credentials.dart' as razorCredentials;
 import 'package:http/http.dart' as http;
+import 'package:screen_protector/screen_protector.dart';
 
 class CourseSingleView extends ConsumerStatefulWidget {
   final CourseModel courseModel;
@@ -33,6 +36,7 @@ class CourseSingleView extends ConsumerStatefulWidget {
 class _CourseSingleViewState extends ConsumerState<CourseSingleView> {
   late VideoPlayerController _videoPlayerController1;
   FlexiController? _FlexiController;
+  final courselistprovider=StateProvider((ref) => []);
   bool isSourceError = false;
     late Razorpay _razorpay;
   final paymentStatusProvider = StateProvider((ref) => 'Not Initiated');
@@ -45,6 +49,9 @@ class _CourseSingleViewState extends ConsumerState<CourseSingleView> {
 
   TextEditingController amtController = TextEditingController();
   String? coursePrice;
+  String? username;
+  String? coursename;
+  String? docidcourse;
   
   @override
   void initState() {
@@ -54,18 +61,37 @@ class _CourseSingleViewState extends ConsumerState<CourseSingleView> {
     _razorpay.on(Razorpay.EVENT_PAYMENT_ERROR, handlePaymentError);
     _razorpay.on(Razorpay.EVENT_EXTERNAL_WALLET, handleExternalWallet);
     coursePrice =widget.courseModel.ogprice+'00';
+    coursename=widget.courseModel.coursename;
+    username=userModel!.name;
+    docidcourse=widget.courseModel.docid;
     initializePlayer();
+    avoidscreenshot();
+    
+    
+  }
+  
+  
+  // getCoursemodelslist(){
+  //   ref.watch(courselistprovider.notifier).state=widget.courseModel.listofstudents;
+  //
+  //
+  // }
+  avoidscreenshot()async{
+    await ScreenProtector.protectDataLeakageOn();
+
   }
 
    onPaymentSuccess(
       {required String price,
       required double discount,
       required String courseName,
+        required String docidcourse,
       required String subName,
       required Map<dynamic, dynamic> response}) {
     print(price);
     print('ente price------------');
     RazorPayResponseModel data = RazorPayResponseModel(
+      docidcourse: docidcourse,
         price: price,
         discount: discount,
         courseName: courseName,
@@ -74,17 +100,21 @@ class _CourseSingleViewState extends ConsumerState<CourseSingleView> {
         purchaseDate: DateTime.now());
     _razorpaySuccess.add(data.toMap());
 
-    List _newStudentList = widget.courseModel.listofstudents;
-    _newStudentList.add(userModel!.id!);
-    print(_newStudentList);
+
+
+    // List _newStudentList = widget.courseModel.listofstudents;
+    // _newStudentList.add(userModel!.id!);
+    // print(_newStudentList);
     print('new list----------');
 
-    CourseModel _courseUpdateData =
-        coursemodell!.copyWith(listofstudents: _newStudentList);
+    // CourseModel _courseUpdateData =
+    //     coursemodell!.copyWith(listofstudents: _newStudentList);
 
     _courses
-        .doc(widget.courseModel.docid)
-        .update(_courseUpdateData.toMap())
+        .doc(data.docidcourse)
+        .update({
+      "listofstudents":FieldValue.arrayUnion([userModel!.id??"null"])
+    })
         .then((value) {
       showSnackbar(context, 'Courses are now unlocked');
     });
@@ -138,7 +168,7 @@ class _CourseSingleViewState extends ConsumerState<CourseSingleView> {
 
       /// Generate order_id using Orders API
 
-      'description': 'Course 1  ',
+      'description': '${coursename??"no name"} ',
       'timeout': 60 * 5,
 
       /// in seconds // 5 minutes
@@ -162,11 +192,18 @@ class _CourseSingleViewState extends ConsumerState<CourseSingleView> {
         .read(paymentStatusProvider.notifier)
         .update((state) => 'Payment Successfull');
     onPaymentSuccess(
+      docidcourse: docidcourse??"null",
         price: widget.courseModel.ogprice??'' ,
         discount: 0,
-        courseName: 'course 1',
-        subName: 'course 1',
-        response: {});
+        courseName: widget.courseModel.coursename,
+        subName: username??"null",
+        response: {
+          "order id":"${response.orderId}",
+          "signature":"${response.signature}",
+          "orderId":"${response.orderId}"
+
+
+        });
     print(response.signature);
     print(response.paymentId);
     print(response.orderId);
@@ -184,7 +221,7 @@ class _CourseSingleViewState extends ConsumerState<CourseSingleView> {
 
     ///course purchased...
     Fluttertoast.showToast(
-      msg: "payment Successfull " + response.paymentId!,
+      msg: "payment Successfull Refresh the Page" + response.paymentId!,
       toastLength: Toast.LENGTH_SHORT,
     );
   }
@@ -260,7 +297,7 @@ class _CourseSingleViewState extends ConsumerState<CourseSingleView> {
   Stream<CourseModel> courseStream() {
     return FirebaseFirestore.instance
         .collection(FirebaseConstants.courses)
-        .doc(widget.courseModel.docid)
+        .doc(docidcourse)
         .snapshots()
         .map((event) =>
             CourseModel.fromMap(event.data() as Map<String, dynamic>));
@@ -282,7 +319,7 @@ class _CourseSingleViewState extends ConsumerState<CourseSingleView> {
           start: const Duration(seconds: 0),
           end: Duration(
               seconds: _videoPlayerController1.value.duration.inSeconds),
-          text: 'Whats up? :)',
+          text: '',
         ),
       ];
 
@@ -358,9 +395,12 @@ class _CourseSingleViewState extends ConsumerState<CourseSingleView> {
     await initializePlayer();
   }
 
+
   @override
   void dispose() {
     _FlexiController!.dispose();
+    _FlexiController!.pause();
+    _videoPlayerController1.pause();
     _videoPlayerController1.dispose();
     _razorpay.clear();
     super.dispose();
@@ -368,6 +408,8 @@ class _CourseSingleViewState extends ConsumerState<CourseSingleView> {
 
   @override
   Widget build(BuildContext context) {
+    // ref.watch(courselistprovider.notifier).state=widget.courseModel.listofstudents;
+
     h = MediaQuery.of(context).size.height;
     w = MediaQuery.of(context).size.width;
     return SafeArea(
@@ -491,9 +533,10 @@ class _CourseSingleViewState extends ConsumerState<CourseSingleView> {
               StreamBuilder<CourseModel>(
                   stream: courseStream(),
                   builder: (context, snapshot) {
+                    // final containorno=widget.courseModel.listofstudents
                     CourseModel? data = snapshot.data;
                     if (snapshot.hasData) {
-                      return data!.listofstudents.contains(userModel!.id)
+                      return widget.courseModel.listofstudents.contains(userModel!.id)
                           ? SizedBox()
                           : Container(
                               child: Column(
@@ -547,7 +590,9 @@ class _CourseSingleViewState extends ConsumerState<CourseSingleView> {
                               padding: EdgeInsets.only(bottom: h * 0.02),
                               child: GestureDetector(
                                 onTap: () {
-                                data!.listofstudents.contains(userModel!.id)
+                                  ref.watch(courselistprovider).contains(userModel!.id)?print("ts"):print("no");
+                                // data!
+                                    widget.courseModel.listofstudents.contains(userModel!.id)
                                     ? Navigator.push(
                                         context,
                                         MaterialPageRoute(
@@ -571,9 +616,11 @@ class _CourseSingleViewState extends ConsumerState<CourseSingleView> {
                                           decoration: BoxDecoration(
                                             borderRadius:
                                                 BorderRadius.circular(w * 0.02),
-                                            image: const DecorationImage(
-                                                image: AssetImage(
-                                                    "assets/Banner1.jpg"),
+                                            image:
+                                            DecorationImage(
+                                                // image: AssetImage("assets/Banner1.jpg"),
+                                                image: CachedNetworkImageProvider(
+                                                    widget.courseModel.thumbnailImage?? "https://media.istockphoto.com/id/1401607744/vector/megaphone-loudspeaker-speaker-social-media-advertising-and-promotion-symbol-marketing.jpg?s=612x612&w=0&k=20&c=6mn25IhbAK4vCNpDwo2hySPhOO0hWwkkFDCaYw9tLLs="),
                                                 fit: BoxFit.cover),
                                           ),
                                         ),
@@ -607,7 +654,7 @@ class _CourseSingleViewState extends ConsumerState<CourseSingleView> {
                                             MainAxisAlignment.start,
                                         children: [
                                           Text(
-                                            "How to be Mentalist",
+                                            "",
                                             style: TextStyle(
                                               color: Palette.blackColor,
                                               fontSize: w * 0.04,
@@ -615,7 +662,7 @@ class _CourseSingleViewState extends ConsumerState<CourseSingleView> {
                                             ),
                                           ),
                                           Text(
-                                            "Tutor: Nafih",
+                                            "${widget.courseModel.tutor}",
                                             style: TextStyle(
                                               color: Palette.blackColor,
                                               fontSize: w * 0.038,
@@ -623,7 +670,7 @@ class _CourseSingleViewState extends ConsumerState<CourseSingleView> {
                                             ),
                                           ),
                                           Text(
-                                            "Level ${index + 1}",
+                                            "class ${index + 1}",
                                             style: TextStyle(
                                               color: Palette.blackColor,
                                               fontSize: w * 0.03,
@@ -631,7 +678,7 @@ class _CourseSingleViewState extends ConsumerState<CourseSingleView> {
                                             ),
                                           ),
                                           Text(
-                                            "The class is about to teach them the tricks that one needs to hone. There are also a few skills students need to master to become a mentalist",
+                                            "",
                                             style: TextStyle(
                                               color: Palette.blackColor,
                                               fontSize: w * 0.02,

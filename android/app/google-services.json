@@ -7,6 +7,114 @@
   "client": [
     {
       "client_info": {
+        "mobilesdk_app_id": "1:650766422172:android:7c555f9be8f6575d795d59",
+        "android_client_info": {
+          "package_name": "apps.hypnohand.hypnohand"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "650766422172-3c79nirfsd92kfor5uodsb7skl8hk3u2.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBk6iFNzce_PjkzrNSNMhDTW_ymWz0U-oo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "650766422172-3c79nirfsd92kfor5uodsb7skl8hk3u2.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "650766422172-egcur3sr0uqqhgupph3njknqjslqtr9s.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.hypnohand"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:650766422172:android:4df4eefd5762fead795d59",
+        "android_client_info": {
+          "package_name": "com.example.hypno"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "650766422172-3c79nirfsd92kfor5uodsb7skl8hk3u2.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBk6iFNzce_PjkzrNSNMhDTW_ymWz0U-oo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "650766422172-3c79nirfsd92kfor5uodsb7skl8hk3u2.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "650766422172-egcur3sr0uqqhgupph3njknqjslqtr9s.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.hypnohand"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:650766422172:android:3cfd36a9da1dd37e795d59",
+        "android_client_info": {
+          "package_name": "com.example.hypno_admin"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "650766422172-3c79nirfsd92kfor5uodsb7skl8hk3u2.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBk6iFNzce_PjkzrNSNMhDTW_ymWz0U-oo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "650766422172-3c79nirfsd92kfor5uodsb7skl8hk3u2.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "650766422172-egcur3sr0uqqhgupph3njknqjslqtr9s.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.hypnohand"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
         "mobilesdk_app_id": "1:650766422172:android:08f3c22de947fea1795d59",
         "android_client_info": {
           "package_name": "com.example.hypnohand"
@@ -14,11 +122,27 @@
       },
       "oauth_client": [
         {
+          "client_id": "650766422172-kf5ae67onmqtbg7vv3r8r5kdslg4arnq.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.hypnohand",
+            "certificate_hash": "417719f8c0ac112095f3993da4da6b4396ed46ae"
+          }
+        },
+        {
           "client_id": "650766422172-l2imst2m33plr7tibnbtjaa8d6nrt07o.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "com.example.hypnohand",
             "certificate_hash": "a01d9851e3ab1f3e94822c2aa1972ae5055d6e3f"
+          }
+        },
+        {
+          "client_id": "650766422172-m0nhr6eq17t6matvtlrvrljljjr8nv6l.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.hypnohand",
+            "certificate_hash": "7ed82c1efdf1c9669c02618eddb46f1e261ee932"
           }
         },
         {

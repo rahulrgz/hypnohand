@@ -51,7 +51,7 @@ class DefaultFirebaseOptions {
 
   static const FirebaseOptions android = FirebaseOptions(
     apiKey: 'AIzaSyBk6iFNzce_PjkzrNSNMhDTW_ymWz0U-oo',
-    appId: '1:650766422172:android:08f3c22de947fea1795d59',
+    appId: '1:650766422172:android:7c555f9be8f6575d795d59',
     messagingSenderId: '650766422172',
     projectId: 'hypnohands-178b7',
     storageBucket: 'hypnohands-178b7.appspot.com',

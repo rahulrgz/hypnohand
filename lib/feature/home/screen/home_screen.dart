@@ -1,5 +1,7 @@
+import 'dart:async';
+
 import 'package:carousel_slider/carousel_slider.dart';
-import 'package:flml_internet_checker/flml_internet_checker.dart';
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -13,13 +15,12 @@ import 'package:hypnohand/feature/auth/login/controller/auth_controller.dart';
 import 'package:hypnohand/feature/home/controller/homecontroller.dart';
 import 'package:hypnohand/feature/single_course/screen/single_course.dart';
 import 'package:hypnohand/model/usermodel.dart';
-import 'package:internet_connection_checker_plus/internet_connection_checker_plus.dart';
-import 'package:rounded_loading_button_plus/rounded_loading_button.dart';
-import 'package:shimmer/shimmer.dart';
+
 import 'package:url_launcher/url_launcher.dart';
 import '../../../core/common/error_text.dart';
 import '../../../core/global_variables/global_variables.dart';
 import '../../../core/theme/pallete.dart';
+import '../../connectivity/connectivity.dart';
 
 class HomeScreen extends ConsumerStatefulWidget {
   const HomeScreen({super.key});
@@ -29,64 +30,66 @@ class HomeScreen extends ConsumerStatefulWidget {
 }
 
 class _HomeScreenState extends ConsumerState<HomeScreen> {
-  final RoundedLoadingButtonController _buttonController = RoundedLoadingButtonController();
-  bool _isDeviceConnected = false;
-  var connectionStatus;
-  final internetConnectionStatusProvider =
-  StateProvider<InternetStatus>(
-          (ref) => InternetStatus.connected);
-
-  final internetcheckProvider = StateProvider((ref) => false);
-
-  checkConnection() async {
-
-    _isDeviceConnected = await InternetConnection().hasInternetAccess;
-    if(_isDeviceConnected){
-      connectionStatus =  InternetStatus.connected;
-    }else{
-
-
-      connectionStatus =  InternetStatus.disconnected;
-
-
-    }
-
-    ref.watch(internetConnectionStatusProvider.notifier).state =
-        connectionStatus;
-    ref.watch(internetcheckProvider.notifier).state = _isDeviceConnected;
-    if (_isDeviceConnected) {
-      _buttonController.success();
-    } else {
-      _buttonController.stop();
-
-      const snackBar=SnackBar(content: Text("No active connection found"));
-
-      ScaffoldMessenger.of(context).showSnackBar(snackBar);
-
-
-    }
-    InternetConnection().onStatusChange.listen((result) async {
-      _buttonController.stop();
-      if (result != InternetStatus.disconnected) {
-        _isDeviceConnected = await InternetConnection().hasInternetAccess;
-
-        connectionStatus =  InternetStatus.connected;
-
-        ref.read(internetConnectionStatusProvider.notifier).state =
-            connectionStatus;
-        ref.read(internetcheckProvider.notifier).state = _isDeviceConnected;
-      }
-      else {
-        _buttonController.reset();
-        ref.read(internetConnectionStatusProvider.notifier).state =
-            InternetStatus.disconnected;
-        ref.read(internetcheckProvider.notifier).state = false;
-      }
-    });
-  }
+  // final RoundedLoadingButtonController _buttonController = RoundedLoadingButtonController();
+  // bool _isDeviceConnected = false;
+  // var connectionStatus;
+  // final internetConnectionStatusProvider =
+  // StateProvider<InternetStatus>(
+  //         (ref) => InternetStatus.connected);
+  //
+  // final internetcheckProvider = StateProvider((ref) => false);
+  //
+  // checkConnection() async {
+  //
+  //   _isDeviceConnected = await InternetConnection().hasInternetAccess;
+  //   if(_isDeviceConnected){
+  //     connectionStatus =  InternetStatus.connected;
+  //   }else{
+  //
+  //
+  //     connectionStatus =  InternetStatus.disconnected;
+  //
+  //
+  //   }
+  //
+  //   ref.watch(internetConnectionStatusProvider.notifier).state =
+  //       connectionStatus;
+  //   ref.watch(internetcheckProvider.notifier).state = _isDeviceConnected;
+  //   if (_isDeviceConnected) {
+  //     _buttonController.success();
+  //   } else {
+  //     _buttonController.stop();
+  //
+  //     const snackBar=SnackBar(content: Text("No active connection found"));
+  //
+  //     ScaffoldMessenger.of(context).showSnackBar(snackBar);
+  //
+  //
+  //   }
+  //   InternetConnection().onStatusChange.listen((result) async {
+  //     _buttonController.stop();
+  //     if (result != InternetStatus.disconnected) {
+  //       _isDeviceConnected = await InternetConnection().hasInternetAccess;
+  //
+  //       connectionStatus =  InternetStatus.connected;
+  //
+  //       ref.read(internetConnectionStatusProvider.notifier).state =
+  //           connectionStatus;
+  //       ref.read(internetcheckProvider.notifier).state = _isDeviceConnected;
+  //     }
+  //     else {
+  //       _buttonController.reset();
+  //       ref.read(internetConnectionStatusProvider.notifier).state =
+  //           InternetStatus.disconnected;
+  //       ref.read(internetcheckProvider.notifier).state = false;
+  //     }
+  //   });
+  // }
 
 
   bool performanceDataLoaded=true;
+  final boolstatus=StateProvider((ref) => false);
+
   ///chabnge
   static const _images = [
     'assets/Banner1.jpg',
@@ -113,25 +116,76 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
       print('Could not launch $url');
     }
   }
+  late StreamSubscription subscription;
+  bool isDeviceConnected = false;
+  bool isAlertSet = false;
 
   @override
   void initState() {
     getUser();
-    checkConnection();
+    // checkConnection();
     print('home screeeen------------------------');
     print(userModel?.email ?? 'email not found');
+    // getConnectivity();
     super.initState();
   }
+
+  // getConnectivity() =>
+  //     subscription = Connectivity().onConnectivityChanged.listen(
+  //           (ConnectivityResult result) async {
+  //         isDeviceConnected = await InternetConnectionChecker().hasConnection;
+  //         if(isDeviceConnected==false){
+  //           ref.watch(boolstatus.notifier).update((state) => true);
+  //
+  //         }else{
+  //           ref.watch(boolstatus.notifier).update((state) => false);
+  //
+  //         }
+  //
+  //         // if (!isDeviceConnected && isAlertSet == false) {
+  //         //   ref.watch(boolstatus.notifier).update((state) => true);
+  //         //   showDialogBox();
+  //         //   setState(() => isAlertSet = true);
+  //         // }
+  //       },
+  //     );
+  // showDialogBox() => showCupertinoDialog<String>(
+  //   context: context,
+  //   builder: (BuildContext context) => CupertinoAlertDialog(
+  //     title: const Text('No Connection'),
+  //     content: const Text('Please check your internet connectivity'),
+  //     actions: <Widget>[
+  //       TextButton(
+  //         onPressed: () async {
+  //           Navigator.pop(context, 'Cancel');
+  //           setState(() => isAlertSet = false);
+  //           isDeviceConnected =
+  //           await InternetConnectionChecker().hasConnection;
+  //           if (!isDeviceConnected && isAlertSet == false) {
+  //             ref.watch(boolstatus.notifier).update((state) => true);
+  //             showDialogBox();
+  //             setState(() => isAlertSet = true);
+  //           }
+  //         },
+  //         child: const Text('OK'),
+  //       ),
+  //     ],
+  //   ),
+  // );
 
   @override
   Widget build(BuildContext context) {
     h = MediaQuery.of(context).size.height;
     w = MediaQuery.of(context).size.width;
+    final connectivityStatus = ref.watch(connectivityProvider);
     return Scaffold(
       backgroundColor: Palette.bgColor,
-      body: SingleChildScrollView(
+      body:connectivityStatus==ConnectivityStatus.disconnected?Center(child: Text("No internet connection")):
+      SingleChildScrollView(
         physics: const BouncingScrollPhysics(),
-        child: ref.watch(internetConnectionStatusProvider)==InternetStatus.disconnected?Center(child: Text("no internet"),): Column(
+        child:
+        // ref.watch(internetConnectionStatusProvider)==InternetStatus.disconnected?Center(child: Text("no internet"),):
+        Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             SizedBox(height: h * 0.05),
@@ -374,6 +428,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                                       if (s.isEmpty) {
                                         print("empty");
                                       } else {
+
                                         print("not empty");
                                       }
                                       return Padding(

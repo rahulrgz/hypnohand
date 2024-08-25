@@ -3,6 +3,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:video_player/video_player.dart';
+import 'package:screen_protector/screen_protector.dart';
+
 
 class VideoScreenPlay extends StatefulWidget {
   final String videolink;
@@ -20,7 +22,14 @@ class _VideoScreenPlayState extends State<VideoScreenPlay> {
   void initState() {
     super.initState();
     initializePlayer();
+    avoidscreenshot();
+
   }
+  avoidscreenshot()async{
+    await ScreenProtector.protectDataLeakageOn();
+
+  }
+
 
   Future<void> initializePlayer() async {
     setState(() {

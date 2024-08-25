@@ -17,11 +17,11 @@ class SingleCourseRepository {
 CollectionReference get _razorpaySuccess =>
     _firestore.collection(FirebaseConstants.usersCollection);
 
-onPaymentSuccess({required String price,required double discount,required String courseName,required String subName,required Map<dynamic,dynamic>response}){
-  RazorPayResponseModel data= RazorPayResponseModel(
-      price: price, discount: discount, courseName: courseName, subName: subName, response: response,purchaseDate: DateTime.now()
-  );
-  _razorpaySuccess.add(data.toMap());
-}
+// onPaymentSuccess({required String price,required double discount,required String courseName,required String subName,required Map<dynamic,dynamic>response}){
+//   RazorPayResponseModel data= RazorPayResponseModel(
+//       price: price, discount: discount, courseName: courseName, subName: subName, response: response,purchaseDate: DateTime.now()
+//   );
+//   _razorpaySuccess.add(data.toMap());
+// }
 
 }

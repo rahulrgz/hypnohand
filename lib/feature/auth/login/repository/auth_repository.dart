@@ -114,6 +114,8 @@ class AuthRepository {
       } else {
 
         print("old user");
+        prefs!.setString('currentuserId', userCredential?.user!.uid?? "");
+
         // var sessionsDoc = await _sessions.doc(currentUserId).get();
 
         // if (sessionsDoc.exists) {
@@ -160,6 +162,7 @@ class AuthRepository {
     } on FirebaseException catch (e) {
       throw 'firebase exception';
     } catch (e) {
+      print("eroor ${e.toString()}");
       return left(Failure(e.toString()));
     }
   }
@@ -190,6 +193,32 @@ class AuthRepository {
       return data;
     }
     return null;
+  }
+  Stream<bool?> getPlaystorebool() {
+    return _firestore.collection("settings").doc("playstore").snapshots().map(
+          (snapshot) {
+        if (snapshot.exists && snapshot.data() != null) {
+          final boolvalue = snapshot.data()!['playstore'] as bool?;
+          return boolvalue;
+        } else {
+          // Handle non-existent document or missing 'discount' field
+          return false; // Or throw an exception if preferred
+        }
+      },
+    );
+  }
+  Stream<bool?> getloginPlaystorebool() {
+    return _firestore.collection("settings").doc("login").snapshots().map(
+          (snapshot) {
+        if (snapshot.exists && snapshot.data() != null) {
+          final boolvalue = snapshot.data()!['playstore'] as bool?;
+          return boolvalue;
+        } else {
+          // Handle non-existent document or missing 'discount' field
+          return false; // Or throw an exception if preferred
+        }
+      },
+    );
   }
 
   void logOut({required BuildContext context}) async {

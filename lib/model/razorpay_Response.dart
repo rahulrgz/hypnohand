@@ -3,6 +3,7 @@ class RazorPayResponseModel{
   String price;
   double discount;
   String courseName;
+  String docidcourse;
   String subName;
   Map<dynamic, dynamic> response;
   DateTime purchaseDate;
@@ -11,6 +12,7 @@ class RazorPayResponseModel{
     required this.price,
     required this.discount,
     required this.courseName,
+    required this.docidcourse,
     required this.subName,
     required this.response,
     required this.purchaseDate,
@@ -21,6 +23,7 @@ class RazorPayResponseModel{
       'price': this.price,
       'discount': this.discount,
       'courseName': this.courseName,
+      'docidcourse': this.docidcourse,
       'subName': this.subName,
       'response':this.response,
       'purchaseDate':this.purchaseDate,
@@ -32,6 +35,7 @@ class RazorPayResponseModel{
       price: map['price'] as String,
       discount: map['discount'] as double,
       courseName: map['courseName'] as String,
+      docidcourse: map['docidcourse'] as String,
       subName: map['subName'] as String,
       response: map['response']as Map,
       purchaseDate: map['purchaseDate']as DateTime,
@@ -42,6 +46,7 @@ class RazorPayResponseModel{
     String? price,
     double? discount,
     String? courseName,
+    String? docidcourse,
     String? subName,
     Map? response,
     DateTime?purchaseDate,
@@ -50,6 +55,7 @@ class RazorPayResponseModel{
       price: price ?? this.price,
       discount: discount ?? this.discount,
       courseName: courseName ?? this.courseName,
+      docidcourse: docidcourse ?? this.docidcourse,
       subName: subName ?? this.subName,
       response: response??this.response,
       purchaseDate: purchaseDate??this.purchaseDate,

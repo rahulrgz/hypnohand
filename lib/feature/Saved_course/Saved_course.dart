@@ -1,6 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:date_time_format/date_time_format.dart';
-import 'package:flml_internet_checker/flml_internet_checker.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -8,11 +7,12 @@ import 'package:hypnohand/core/common/error_text.dart';
 import 'package:hypnohand/core/common/loader.dart';
 import 'package:hypnohand/model/courseModel.dart';
 import 'package:hypnohand/feature/home/controller/homecontroller.dart';
-import 'package:internet_connection_checker_plus/internet_connection_checker_plus.dart';
 import 'package:rounded_loading_button_plus/rounded_loading_button.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../../core/global_variables/global_variables.dart';
 import '../../core/theme/pallete.dart';
+import '../connectivity/connectivity.dart';
 import '../single_course/screen/single_course.dart';
 
 class SavedCourse extends ConsumerStatefulWidget {
@@ -24,67 +24,83 @@ class SavedCourse extends ConsumerStatefulWidget {
 
 class _SavedCourseState extends ConsumerState<SavedCourse> {
 
-  final RoundedLoadingButtonController _buttonController = RoundedLoadingButtonController();
-  bool _isDeviceConnected = false;
-  var connectionStatus;
-  final internetConnectionStatusProvider =
-  StateProvider<InternetStatus>(
-          (ref) => InternetStatus.connected);
+  // final RoundedLoadingButtonController _buttonController = RoundedLoadingButtonController();
+  // bool _isDeviceConnected = false;
+  // var connectionStatus;
+  // final internetConnectionStatusProvider =
+  // StateProvider<InternetStatus>(
+  //         (ref) => InternetStatus.connected);
+  //
+  // final internetcheckProvider = StateProvider((ref) => false);
+  //
+  // checkConnection() async {
+  //
+  //   _isDeviceConnected = await InternetConnection().hasInternetAccess;
+  //   if(_isDeviceConnected){
+  //     connectionStatus =  InternetStatus.connected;
+  //   }else{
+  //
+  //
+  //     connectionStatus =  InternetStatus.disconnected;
+  //
+  //
+  //   }
+  //
+  //   ref.watch(internetConnectionStatusProvider.notifier).state =
+  //       connectionStatus;
+  //   ref.watch(internetcheckProvider.notifier).state = _isDeviceConnected;
+  //   if (_isDeviceConnected) {
+  //     _buttonController.success();
+  //   } else {
+  //     _buttonController.stop();
+  //
+  //     const snackBar=SnackBar(content: Text("No active connection found"));
+  //
+  //     ScaffoldMessenger.of(context).showSnackBar(snackBar);
+  //
+  //
+  //   }
+  //   InternetConnection().onStatusChange.listen((result) async {
+  //     _buttonController.stop();
+  //     if (result != InternetStatus.disconnected) {
+  //       _isDeviceConnected = await InternetConnection().hasInternetAccess;
+  //
+  //       connectionStatus =  InternetStatus.connected;
+  //
+  //       ref.read(internetConnectionStatusProvider.notifier).state =
+  //           connectionStatus;
+  //       ref.read(internetcheckProvider.notifier).state = _isDeviceConnected;
+  //     }
+  //     else {
+  //       _buttonController.reset();
+  //       ref.read(internetConnectionStatusProvider.notifier).state =
+  //           InternetStatus.disconnected;
+  //       ref.read(internetcheckProvider.notifier).state = false;
+  //     }
+  //   });
+  // }
+  void launchYouTubeVideo(String uri ) async {
+    final url = Uri.parse(uri.toString());
 
-  final internetcheckProvider = StateProvider((ref) => false);
-
-  checkConnection() async {
-
-    _isDeviceConnected = await InternetConnection().hasInternetAccess;
-    if(_isDeviceConnected){
-      connectionStatus =  InternetStatus.connected;
-    }else{
-
-
-      connectionStatus =  InternetStatus.disconnected;
-
-
+    // Check if the URI is empty or null before attempting to launch
+    if (uri == null || uri.isEmpty) {
+      print('URI is empty or null');
+      return;
     }
 
-    ref.watch(internetConnectionStatusProvider.notifier).state =
-        connectionStatus;
-    ref.watch(internetcheckProvider.notifier).state = _isDeviceConnected;
-    if (_isDeviceConnected) {
-      _buttonController.success();
+    if (await canLaunchUrl(url)) {
+      await launchUrl(url);
     } else {
-      _buttonController.stop();
-
-      const snackBar=SnackBar(content: Text("No active connection found"));
-
-      ScaffoldMessenger.of(context).showSnackBar(snackBar);
-
-
+      print('Could not launch $url');
     }
-    InternetConnection().onStatusChange.listen((result) async {
-      _buttonController.stop();
-      if (result != InternetStatus.disconnected) {
-        _isDeviceConnected = await InternetConnection().hasInternetAccess;
-
-        connectionStatus =  InternetStatus.connected;
-
-        ref.read(internetConnectionStatusProvider.notifier).state =
-            connectionStatus;
-        ref.read(internetcheckProvider.notifier).state = _isDeviceConnected;
-      }
-      else {
-        _buttonController.reset();
-        ref.read(internetConnectionStatusProvider.notifier).state =
-            InternetStatus.disconnected;
-        ref.read(internetcheckProvider.notifier).state = false;
-      }
-    });
   }
+
 
 
   @override
   void initState() {
     // TODO: implement initState
-checkConnection();
+// checkConnection();
     print('saved course');
     super.initState();
   }
@@ -93,12 +109,11 @@ checkConnection();
   Widget build(BuildContext context) {
     h = MediaQuery.of(context).size.height;
     w = MediaQuery.of(context).size.width;
-    return InternetChecker(
-      placeHolder: CircularProgressIndicator(),
-      internetConnectionText:'Not Internet Connection',
-      child: Scaffold(
+    return Scaffold(
         backgroundColor: Color(0xFFF8F6F4),
-        body:ref.watch(internetConnectionStatusProvider)==InternetStatus.disconnected?Center(child: Text("no internet"),): Column(
+        body:
+        // ref.watch(internetConnectionStatusProvider)==InternetStatus.disconnected?Center(child: Text("no internet"),):
+         ref.watch(connectivityProvider)==ConnectivityStatus.disconnected?Center(child: Text("No internet Connection"),) : Column(
           children: [
             SizedBox(
               height: h * 0.08,
@@ -167,6 +182,14 @@ checkConnection();
                       padding: EdgeInsets.fromLTRB(w * 0.04, 0, w * 0.04, h * 0.02),
                       child: GestureDetector(
                         onTap: () {
+                          if(data[index].url!.isNotEmpty){
+                            launchYouTubeVideo(data[index].url!.toString());
+
+
+                          }
+                          else{
+
+                          }
                           // Navigator.push(
                           //   context,
                           //   CupertinoPageRoute(
@@ -192,10 +215,13 @@ checkConnection();
                                   width: w * 0.31,
                                   decoration: BoxDecoration(
                                       borderRadius: BorderRadius.circular(w * 0.03),
-                                      image: DecorationImage(
+                                      image:
+                                      DecorationImage(
                                           image: CachedNetworkImageProvider(
                                               data[index].imageurl?? "https://media.istockphoto.com/id/1401607744/vector/megaphone-loudspeaker-speaker-social-media-advertising-and-promotion-symbol-marketing.jpg?s=612x612&w=0&k=20&c=6mn25IhbAK4vCNpDwo2hySPhOO0hWwkkFDCaYw9tLLs="),
-                                          fit: BoxFit.fill)),
+
+                                          fit: BoxFit.fill)
+                                  ),
                                 ),
                                 SizedBox(width: w * 0.036),
                                 Column(
@@ -313,7 +339,7 @@ checkConnection();
             },)
           ],
         ),
-      ),
+
     );
   }
 }

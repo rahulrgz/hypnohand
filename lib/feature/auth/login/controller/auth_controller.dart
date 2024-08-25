@@ -14,7 +14,8 @@ import 'package:hypnohand/main.dart';
 import 'package:hypnohand/model/usermodel.dart';
 
 final userProvier = StateProvider<UserModel?>((ref) => null);
-
+final loginPlaystorebool=StreamProvider((ref) => ref.watch(authControllerProvider.notifier).loginplaystorebool());
+final getPlayStoreStream=StreamProvider((ref) => ref.watch(authControllerProvider.notifier).playstorebool());
 final authControllerProvider = StateNotifierProvider<AuthController, bool>(
     (ref) => AuthController(
         authRepository: ref.watch(authRepositoryProvider), ref: ref));
@@ -39,6 +40,12 @@ class AuthController extends StateNotifier<bool> {
         super(false);
 
   Stream<User?> get authStateChange => _authRepository.authStateChange;
+  Stream<bool?> playstorebool(){
+    return _authRepository.getPlaystorebool();
+  }
+  Stream<bool?> loginplaystorebool(){
+    return _authRepository.getloginPlaystorebool();
+  }
 ///chabnge
   void signInWithGoogle({
     required WidgetRef ref,

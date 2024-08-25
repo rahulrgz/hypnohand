@@ -60,6 +60,11 @@ return _firestore.collection("slidersetting").doc("sliderss").snapshots().map((e
     return querysnapshot.docs.map((e) => CourseModel.fromMap(e.data() as Map<String,dynamic>)).toList();
 
   }
+  Stream<List<CourseModel>> getcoursesbystream(){
+    return _courses.where("status",isEqualTo: true).snapshots().map((event) =>
+        event.docs.map((e) => CourseModel.fromMap(e.data() as Map<String,dynamic>)).toList());
+
+  }
   Stream<List<CourseModel>> getcoursebysearch(String name)
   {
     return _courses.where("status",isEqualTo: true).where("search",arrayContains:name.isEmpty ? null : name.toUpperCase(), )
