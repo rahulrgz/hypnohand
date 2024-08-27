@@ -112,7 +112,7 @@ class AuthRepository {
         });
         return right(null);
       } else {
-
+prefs!.setString('currentuserId', currentUserId??'no current user Id');
         print("old user");
         prefs!.setString('currentuserId', userCredential?.user!.uid?? "");
 
