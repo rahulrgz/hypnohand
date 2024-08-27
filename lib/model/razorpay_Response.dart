@@ -46,10 +46,10 @@ class RazorPayResponseModel{
     String? price,
     double? discount,
     String? courseName,
-    String? docidcourse,
+    String?  docidcourse,
     String? subName,
     Map? response,
-    DateTime?purchaseDate,
+    DateTime? purchaseDate,
   }) {
     return RazorPayResponseModel(
       price: price ?? this.price,
