@@ -6,12 +6,12 @@ import 'package:hypnohand/feature/single_course/repository/singleCourse_reposito
 
 final singleCourseControllerProvider = StateProvider(
         (ref) => SingleCourseController(
-        singleCourseRepository: ref.watch(SingleCourseRepositoryProvider), ref: ref,
+         singleCourseRepository: ref.watch(SingleCourseRepositoryProvider), ref: ref,
         ),
 );
 
 class SingleCourseController {
-  final SingleCourseRepository _singleCourseRepository;
+  final  SingleCourseRepository _singleCourseRepository;
   final Ref _ref;
 
   SingleCourseController({required SingleCourseRepository singleCourseRepository, required Ref ref})

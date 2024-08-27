@@ -14,13 +14,13 @@ class VideoScreenPlay extends StatefulWidget {
   State<VideoScreenPlay> createState() => _VideoScreenPlayState();
 }
 
-class _VideoScreenPlayState extends State<VideoScreenPlay> {
+class  _VideoScreenPlayState extends State<VideoScreenPlay> {
   late VideoPlayerController _videoPlayerController1;
-  FlexiController? _FlexiController;
+  FlexiController?  _FlexiController;
   bool isSourceError = false;
   @override
   void initState() {
-    super.initState();
+     super.initState();
     initializePlayer();
     avoidscreenshot();
 

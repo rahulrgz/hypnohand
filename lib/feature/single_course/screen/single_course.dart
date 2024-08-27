@@ -300,7 +300,7 @@ class _CourseSingleViewState extends ConsumerState<CourseSingleView> {
         .doc(docidcourse)
         .snapshots()
         .map((event) =>
-            CourseModel.fromMap(event.data() as Map<String, dynamic>));
+            CourseModel .fromMap(event.data() as Map<String, dynamic>));
   }
 
   Future<void> initializePlayer() async {

@@ -14,7 +14,7 @@ class SingleCourseRepository {
     required FirebaseFirestore firestore,
   }) : _firestore = firestore;
 
-CollectionReference get _razorpaySuccess =>
+CollectionReference  get _razorpaySuccess =>
     _firestore.collection(FirebaseConstants.usersCollection);
 
 // onPaymentSuccess({required String price,required double discount,required String courseName,required String subName,required Map<dynamic,dynamic>response}){

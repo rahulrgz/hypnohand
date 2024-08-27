@@ -18,10 +18,10 @@ class PaymentScreen extends ConsumerStatefulWidget {
   PaymentScreen({required this.data});
 
   @override
-  ConsumerState<PaymentScreen> createState() => _PaymentScreenState();
+  ConsumerState<PaymentScreen> createState() =>  _PaymentScreenState();
 }
 
-class _PaymentScreenState extends ConsumerState<PaymentScreen> {
+class _PaymentScreenState extends  ConsumerState<PaymentScreen> {
   late Razorpay _razorpay;
   final paymentStatusProvider = StateProvider((ref) => 'Not Initiated');
 
