@@ -284,11 +284,11 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                 Center(
                   child: Text(
                     "Version 0.1.10",
-                    textAlign: TextAlign.center,
+                     textAlign: TextAlign.center,
                     style: TextStyle(
                         color: Colors.black54,
                         fontSize: h * 0.018,
-                        fontWeight: FontWeight.w300),
+                         fontWeight: FontWeight.w300),
                   ),
                 ),
                 SizedBox(height: h * 0.01),

@@ -180,7 +180,7 @@ class _SavedCourseState extends ConsumerState<SavedCourse> {
                   itemBuilder: (context, index) {
                     return Padding(
                       padding: EdgeInsets.fromLTRB(w * 0.04, 0, w * 0.04, h * 0.02),
-                      child: GestureDetector(
+                       child: GestureDetector(
                         onTap: () {
                           if(data[index].url!.isNotEmpty){
                             launchYouTubeVideo(data[index].url!.toString());
