@@ -7,8 +7,6 @@ class RazorPayResponseModel{
   String subName;
   Map<dynamic, dynamic> response;
   DateTime purchaseDate;
-  String userId;
-
 
   RazorPayResponseModel({
     required this.price,
@@ -18,7 +16,6 @@ class RazorPayResponseModel{
     required this.subName,
     required this.response,
     required this.purchaseDate,
-    required this.userId
   });
 
   Map<String, dynamic> toMap() {
@@ -30,7 +27,6 @@ class RazorPayResponseModel{
       'subName': this.subName,
       'response':this.response,
       'purchaseDate':this.purchaseDate,
-      'userId': this.userId
     };
   }
 
@@ -43,7 +39,6 @@ class RazorPayResponseModel{
       subName: map['subName'] as String,
       response: map['response']as Map,
       purchaseDate: map['purchaseDate']as DateTime,
-      userId: map['userId']as String,
     );
   }
 
@@ -55,7 +50,6 @@ class RazorPayResponseModel{
     String? subName,
     Map? response,
     DateTime?purchaseDate,
-    String? userId
   }) {
     return RazorPayResponseModel(
       price: price ?? this.price,
@@ -65,7 +59,6 @@ class RazorPayResponseModel{
       subName: subName ?? this.subName,
       response: response??this.response,
       purchaseDate: purchaseDate??this.purchaseDate,
-      userId: userId??this.userId,
     );
   }
 }

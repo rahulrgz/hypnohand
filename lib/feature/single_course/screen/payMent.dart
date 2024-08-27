@@ -18,10 +18,10 @@ class PaymentScreen extends ConsumerStatefulWidget {
   PaymentScreen({required this.data});
 
   @override
-  ConsumerState<PaymentScreen> createState() =>  _PaymentScreenState();
+  ConsumerState<PaymentScreen> createState() => _PaymentScreenState();
 }
 
-class _PaymentScreenState extends  ConsumerState<PaymentScreen> {
+class _PaymentScreenState extends ConsumerState<PaymentScreen> {
   late Razorpay _razorpay;
   final paymentStatusProvider = StateProvider((ref) => 'Not Initiated');
 
@@ -52,15 +52,15 @@ class _PaymentScreenState extends  ConsumerState<PaymentScreen> {
 
   onPaymentSuccess(
       {required String price,
-      required double discount,
-      required String courseName,
+        required double discount,
+        required String courseName,
         required String docidcourse,
-      required String subName,
-      required Map<dynamic, dynamic> response}) {
+        required String subName,
+        required Map<dynamic, dynamic> response}) {
     print(price);
     print('ente price------------');
     RazorPayResponseModel data = RazorPayResponseModel(
-      docidcourse: docidcourse,
+        docidcourse: docidcourse,
         price: price,
         discount: discount,
         courseName: courseName,
@@ -75,7 +75,7 @@ class _PaymentScreenState extends  ConsumerState<PaymentScreen> {
     print('new list----------');
 
     CourseModel _courseUpdateData =
-        coursemodell!.copyWith(listofstudents: _newStudentList);
+    coursemodell!.copyWith(listofstudents: _newStudentList);
 
     _courses
         .doc(widget.data.docid)
@@ -211,7 +211,7 @@ class _PaymentScreenState extends  ConsumerState<PaymentScreen> {
   ///i hv written php code on server side to verify signature.
   ///below fuction is to call the api.
   verifySignature({
-    String? signature,
+      String? signature,
     String? paymentId,
     String? orderId,
   }) async {

@@ -15,7 +15,7 @@ class SingleCourseController {
   final Ref _ref;
 
   SingleCourseController({required SingleCourseRepository singleCourseRepository, required Ref ref})
-      : _singleCourseRepository = singleCourseRepository,
+      : _singleCourseRepository =   singleCourseRepository,
         _ref = ref;
 
   // onPaymentSuccess({required String price,required double discount,required String courseName,required String subName,required Map<dynamic,dynamic>response,required WidgetRef ref}){
