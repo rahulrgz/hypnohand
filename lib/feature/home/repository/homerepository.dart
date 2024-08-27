@@ -19,7 +19,7 @@ class HomeRepository
   CollectionReference get _performance=>_firestore.collection("performance");
   CollectionReference get _courses=>_firestore.collection("courses");
   CollectionReference get _review=>_firestore.collection("review");
-  Future<List<String>> getBanner()async{
+   Future<List<String>> getBanner()async{
     final docshot= await _settings.doc('slider').get();
     return List<String>.from(docshot['sliders']);
     

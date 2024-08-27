@@ -17,13 +17,13 @@ final  getReview=FutureProvider((ref) => ref.watch(homeControllerProvider).getRe
 
 ///chabnge
 final getPerformQuery=FutureProvider((ref) => ref.watch(homeControllerProvider).getPerforms());
-final getCourseList=StreamProvider((ref) => ref.watch(homeControllerProvider).getCourseList());
+ final getCourseList=StreamProvider((ref) => ref.watch(homeControllerProvider).getCourseList());
 final getCoursebysearch=StreamProvider.family((ref,String name) => ref.watch(homeControllerProvider).getCoursebySearch(name));
 final getannounce=FutureProvider((ref) => ref.watch(homeControllerProvider).getannounce());
 class HomeController{
   final HomeRepository _homeRepository;
-  final Ref _ref;
-  HomeController({required HomeRepository homeRepository,required Ref ref}):_homeRepository=homeRepository,_ref=ref;
+  final Ref  _ref;
+   HomeController({required HomeRepository homeRepository,required Ref ref}):_homeRepository=homeRepository,_ref=ref;
 
   Future<List<String>> getBanners(){
     return _homeRepository.getBanner();

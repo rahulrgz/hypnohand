@@ -416,7 +416,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                                   child: ListView.builder(
                                     shrinkWrap: true,
                                     physics: BouncingScrollPhysics(),
-                                    scrollDirection: Axis.horizontal,
+                                     scrollDirection: Axis.horizontal,
                                     itemCount: data.length,
 
                                     itemBuilder: (context, index) {
