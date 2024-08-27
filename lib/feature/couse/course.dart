@@ -19,7 +19,7 @@ class AllCourse extends ConsumerStatefulWidget {
   const AllCourse({super.key});
 
   @override
-  ConsumerState<AllCourse> createState() => _AllCourseState();
+  ConsumerState<AllCourse>   createState() => _AllCourseState();
 }
 final searchcontrol=StateProvider((ref) => "");
 
