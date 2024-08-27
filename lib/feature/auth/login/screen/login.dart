@@ -237,7 +237,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                                         child: Text(
                                       "Sign in with  password",
                                       style: TextStyle(
-                                          color: Palette.whiteColor,
+                                           color: Palette.whiteColor,
                                           fontWeight: FontWeight.w700),
                                     )),
                                   ),

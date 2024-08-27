@@ -185,7 +185,7 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
               ),
             ),
             SizedBox(height: h * 0.02),
-            pageIndex == onBoardingData.length - 1
+             pageIndex == onBoardingData.length - 1
                 ? GestureDetector(
                     onTap: () {
                       Navigator.push(

@@ -177,7 +177,7 @@ class _SplashScreenState extends ConsumerState<SplashScreen> {
 
 
 
-    h = MediaQuery.of(context).size.height;
+      h = MediaQuery.of(context).size.height;
     w = MediaQuery.of(context).size.width;
   return ref.watch(connectivityProvider)==ConnectivityStatus.disconnected?Center(child: Text("No internet Connection"),) :
     // ref.watch(internetConnectionStatusProvider)==InternetStatus.disconnected?Center(child: Text("no internet"),):

@@ -25,7 +25,7 @@ class _EmailSignInState extends ConsumerState<EmailSignIn> {
   GlobalKey<FormState> formkey = GlobalKey<FormState>();
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
-  int passwordError = 0;
+   int passwordError = 0;
   int emailValidation = 0;
   bool emailEntered = false;
 

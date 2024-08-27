@@ -17,7 +17,7 @@ import '../../../../theme/pallete.dart';
 import '../../../connectivity/connectivity.dart';
 import '../controller/auth_controller.dart';
 
-class SignUp_page extends ConsumerStatefulWidget {
+class  SignUp_page extends ConsumerStatefulWidget {
   const SignUp_page({super.key});
 
   @override

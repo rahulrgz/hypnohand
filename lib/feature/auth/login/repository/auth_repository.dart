@@ -87,7 +87,8 @@ class AuthRepository {
       currentUserName = userCredential?.user!.displayName;
       currentUserId = userCredential?.user!.uid;
 
-      if (userCredential!.additionalUserInfo!.isNewUser) {
+      if (userCredential!.additionalUserInfo!.isNewUser)
+      {
         print("New User============================");
 
         // SessionsModel data = SessionsModel(
@@ -110,8 +111,11 @@ class AuthRepository {
           documentReference.update(userModel!.toJson());
           prefs!.setString('currentuserId', documentReference.id);
         });
+
         return right(null);
-      } else {
+
+      }
+      else {
 prefs!.setString('currentuserId', currentUserId??'no current user Id');
         print("old user");
         prefs!.setString('currentuserId', userCredential?.user!.uid?? "");
@@ -132,7 +136,7 @@ prefs!.setString('currentuserId', currentUserId??'no current user Id');
           // print(sessionsModel);
           // print('sessions model-------------------');
 
-          userModel = (await getUser());
+           userModel = (await getUser());
           // if (userModel?.name != null &&
           //     userModel?.phoneNumber != null &&
           //     userModel?.name != '' &&

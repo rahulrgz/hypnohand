@@ -25,7 +25,7 @@ class _GoogleApplesigninState extends ConsumerState<GoogleApplesignin> {
   signInUser() async {
     ref.read(authControllerProvider.notifier).upDateGoogleSignInDoc(
         ref: ref,
-        phone: _numbercontroller.text,
+         phone: _numbercontroller.text,
         name: _namecontroller.text,
         context: context);
     // showSnackbar(context, 'mobile Number not Verified..try again');
