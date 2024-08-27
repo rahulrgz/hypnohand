@@ -246,7 +246,7 @@ class _PerformenceState extends ConsumerState<Performence> {
                                   ),
                                 )
                               ],
-                            ),
+                             ),
                             SizedBox(
                               height: h * 0.08,
                               child: Row(
