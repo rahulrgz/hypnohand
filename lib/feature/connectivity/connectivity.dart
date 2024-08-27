@@ -7,7 +7,7 @@ final connectivityProvider = StateNotifierProvider<ConnectivityNotifier, Connect
       (ref) => ConnectivityNotifier(),
 );
 
-class ConnectivityNotifier extends StateNotifier<ConnectivityStatus> {
+class  ConnectivityNotifier extends StateNotifier<ConnectivityStatus> {
   final Connectivity _connectivity = Connectivity();
 
   ConnectivityStatus _connectionStatus = ConnectivityStatus.unknown;
