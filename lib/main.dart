@@ -8,13 +8,13 @@ import 'package:hypnohand/firebase_options.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 SharedPreferences? prefs;
-void main()async {
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-    prefs = await SharedPreferences.getInstance();
-     await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+  prefs = await SharedPreferences.getInstance();
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   HttpOverrides.global = MyHttpOverrides();
 
-  runApp(ProviderScope(child: const MyApp()));
+  runApp(const ProviderScope(child: MyApp()));
 }
 
 class MyApp extends StatelessWidget {
@@ -25,8 +25,7 @@ class MyApp extends StatelessWidget {
     h = MediaQuery.of(context).size.height;
     w = MediaQuery.of(context).size.width;
     return const MaterialApp(
-      home: SafeArea(
-          child: SplashScreen()),
+      home: SafeArea(child: SplashScreen()),
       debugShowCheckedModeBanner: false,
     );
   }
